@@ -1,21 +1,21 @@
 package mainPackage;
 
 import specialPricePacakage.BuyNGetMAtAPercentageSellPrice;
-import specialPricePacakage.MarkdownSellPrice;
-import specialPricePacakage.NForXDollarSellPrice;
-import specialPricePacakage.RegularSellPrice;
+import specialPricePacakage.Markdown;
+import specialPricePacakage.NForXDollar;
 
 import java.math.BigDecimal;
-import java.util.Map;
+import java.math.RoundingMode;
 
 public class Price {
     private BigDecimal regularPrice;
-    private MarkdownSellPrice markdownSellPrice;
-    private NForXDollarSellPrice nForXDollarSellPrice;
+    private BigDecimal markdown;
+    private NForXDollar nForXDollar;
     private BuyNGetMAtAPercentageSellPrice buyNGetMAtAPercentageSellPrice;
     private BigDecimal itemTotalPrice;
 
     public Price() {
+
     }
 
     public Price(BigDecimal regularPrice) {
@@ -26,20 +26,25 @@ public class Price {
         return regularPrice;
     }
 
-    public MarkdownSellPrice getMarkdownSellPrice() {
-        return markdownSellPrice;
+    public BigDecimal getMarkdown() {
+        return markdown;
     }
 
-    public NForXDollarSellPrice getnForXDollarSellPrice() {
-        return nForXDollarSellPrice;
+    public void setMarkdown(BigDecimal markdown) {
+        this.markdown = markdown;
     }
 
-    public BuyNGetMAtAPercentageSellPrice getBuyNGetMAtAPercentageSellPrice() {
-        return buyNGetMAtAPercentageSellPrice;
+    public BigDecimal getItemRegularTotalPrice(Item item, int quantity) {
+
+        return getFormat(quantity).multiply(item.getPrice().getRegularPrice());
     }
 
-    public BigDecimal getItemTotalPrice(Item item, String name, int quantity) {
+    public BigDecimal getItemTotalPriceAfterMarkdown(Item item, int quantity){
+        return item.getPrice().getRegularPrice().subtract(this.markdown).multiply(getFormat(quantity));
+    }
 
-        return BigDecimal.valueOf(quantity).multiply(item.getPrice().getRegularPrice());
+
+    private BigDecimal getFormat(int value){
+        return BigDecimal.valueOf(value).setScale(0, RoundingMode.HALF_UP);
     }
 }

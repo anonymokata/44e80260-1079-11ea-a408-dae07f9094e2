@@ -1,4 +1,4 @@
 package specialPricePacakage;
 
-public class MarkdownSellPrice {
+public class NForXDollar {
 }

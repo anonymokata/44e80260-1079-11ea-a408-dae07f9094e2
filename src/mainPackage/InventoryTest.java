@@ -14,8 +14,8 @@ public class InventoryTest {
         Item item = new Item("Bread", 10, price);
         Inventory inventory = new Inventory();
         inventory.storeItems(item);
-        assertTrue(inventory.getItems().containsKey("Bread"));
-        assertEquals(getFormat(2), inventory.getItems().get(item.getItemName()).getPrice().getRegularPrice());
+        assertTrue(inventory.getItemHashMap().containsKey("Bread"));
+        assertEquals(getFormat(2), inventory.getItemHashMap().get(item.getItemName()).getPrice().getRegularPrice());
     }
 
 

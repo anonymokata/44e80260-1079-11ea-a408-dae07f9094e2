@@ -1,6 +1,7 @@
 package mainPackage;
 
 import org.junit.Test;
+import specialPricePacakage.Markdown;
 
 import java.math.BigDecimal;
 import java.math.RoundingMode;
@@ -9,7 +10,7 @@ import static org.junit.Assert.*;
 
 public class CheckoutOrderTest {
     @Test
-    public void scanAnExistedItemReturnsTheItemTotalPriceBeforeTax(){
+    public void scanAnExistedItemReturnsTheItemTotalPrice(){
         //store the item
         Price price = new Price(getFormat(2));
         Item item = new Item("Bread", 10, price);
@@ -20,10 +21,35 @@ public class CheckoutOrderTest {
         String name = "Bread";
         int quantity = 10;
         CheckoutOrder checkout = new CheckoutOrder(inventory);
-        assertEquals(getFormat(20), checkout.scanItem(name, quantity));
+        Item scannedItem = checkout.scanItem(name);
+        assertEquals(getFormat(20), price.getItemRegularTotalPrice(scannedItem, quantity));
+
     }
 
+    @Test
+    public void scanningAnMarkdownItemReturnTheItemTotalPrice(){
+        Price price = new Price(getFormat(3));
+        Item item = new Item("Pasta", 10, price);
+        item.getPrice().setMarkdown(getFormat(1));
+        Inventory inventory = new Inventory();
+        inventory.storeItems(item);
+
+        String name = "Pasta";
+        int quantity = 4;
+        CheckoutOrder checkout = new CheckoutOrder(inventory);
+        Item scannedItem = checkout.scanItem(name);
+        assertEquals(getFormat(8.00), scannedItem.getPrice().getItemTotalPriceAfterMarkdown(item, quantity));
+
+    }
+
+
+
+
     private BigDecimal getFormat(int value){
+        return BigDecimal.valueOf(value).setScale(2, RoundingMode.HALF_UP);
+    }
+
+    private BigDecimal getFormat(double value){
         return BigDecimal.valueOf(value).setScale(2, RoundingMode.HALF_UP);
     }
 }

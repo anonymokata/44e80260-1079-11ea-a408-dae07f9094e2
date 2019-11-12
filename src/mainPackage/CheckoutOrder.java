@@ -16,9 +16,8 @@ public class CheckoutOrder {
         this.inventory = inventory;
     }
 
-    public BigDecimal scanItem(String name, int quantity) {
-        Item item = inventory.findAnItem(name);
-        return inventory.getItems().get(name).getPrice().getItemTotalPrice(item, name, quantity);
+    public Item scanItem(String name) {
+        return inventory.findAnItem(name);
     }
 
     public Map<Item, Integer> getItemInQuantity() {
@@ -28,4 +27,5 @@ public class CheckoutOrder {
     public Map<Item, Double> getItemInWeight() {
         return itemInWeight;
     }
+
 }
