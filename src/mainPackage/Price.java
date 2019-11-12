@@ -26,8 +26,8 @@ public class Price {
         return regularPrice;
     }
 
-    public BigDecimal getMarkdown() {
-        return markdown;
+    public NForXDollar getnForXDollar() {
+        return nForXDollar;
     }
 
     public void setMarkdown(BigDecimal markdown) {
@@ -45,6 +45,22 @@ public class Price {
 
 
     private BigDecimal getFormat(int value){
-        return BigDecimal.valueOf(value).setScale(0, RoundingMode.HALF_UP);
+        return BigDecimal.valueOf(value).setScale(2, RoundingMode.HALF_UP);
+    }
+
+    public void setRegularPrice(BigDecimal regularPrice) {
+        this.regularPrice = regularPrice;
+    }
+
+    public void setnForXDollar(NForXDollar nForXDollar) {
+        this.nForXDollar = nForXDollar;
+    }
+
+    public void setBuyNGetMAtAPercentageSellPrice(BuyNGetMAtAPercentageSellPrice buyNGetMAtAPercentageSellPrice) {
+        this.buyNGetMAtAPercentageSellPrice = buyNGetMAtAPercentageSellPrice;
+    }
+
+    public void setItemTotalPrice(BigDecimal itemTotalPrice) {
+        this.itemTotalPrice = itemTotalPrice;
     }
 }

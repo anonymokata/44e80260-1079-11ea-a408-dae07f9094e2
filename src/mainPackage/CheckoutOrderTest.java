@@ -2,6 +2,7 @@ package mainPackage;
 
 import org.junit.Test;
 import specialPricePacakage.Markdown;
+import specialPricePacakage.NForXDollar;
 
 import java.math.BigDecimal;
 import java.math.RoundingMode;
@@ -38,13 +39,31 @@ public class CheckoutOrderTest {
         int quantity = 4;
         CheckoutOrder checkout = new CheckoutOrder(inventory);
         Item scannedItem = checkout.scanItem(name);
-        assertEquals(getFormat(8.00), scannedItem.getPrice().getItemTotalPriceAfterMarkdown(item, quantity));
+        assertEquals(getFormat(8.00), scannedItem.getPrice().getItemTotalPriceAfterMarkdown(scannedItem, quantity));
+
+    }
+
+    @Test
+    public void scanningAnPackageDealReturnTheItemTotalPrice(){
+        Price price = new Price(getFormat(3));
+        Item item = new Item("Pasta", 10, price);
+        Inventory inventory = new Inventory();
+        inventory.storeItems(item);
+
+        //2 for $5
+
+        String name = "Pasta";
+        int quantity = 7;
+        item.getPrice().setnForXDollar(new NForXDollar(getFormat(5), 2));
+
+        CheckoutOrder checkout = new CheckoutOrder(inventory);
+        Item scannedItem = checkout.scanItem(name);
+        assertEquals(getFormat(18), scannedItem.getPrice().getnForXDollar().calculateThisItemTotalPrice(scannedItem, quantity));
 
     }
 
 
-
-
+    
     private BigDecimal getFormat(int value){
         return BigDecimal.valueOf(value).setScale(2, RoundingMode.HALF_UP);
     }
