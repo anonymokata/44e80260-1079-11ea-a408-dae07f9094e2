@@ -6,12 +6,17 @@ import specialPricePacakage.NForXDollarSellPrice;
 import specialPricePacakage.RegularSellPrice;
 
 import java.math.BigDecimal;
+import java.util.Map;
 
 public class Price {
     private BigDecimal regularPrice;
     private MarkdownSellPrice markdownSellPrice;
     private NForXDollarSellPrice nForXDollarSellPrice;
     private BuyNGetMAtAPercentageSellPrice buyNGetMAtAPercentageSellPrice;
+    private BigDecimal itemTotalPrice;
+
+    public Price() {
+    }
 
     public Price(BigDecimal regularPrice) {
         this.regularPrice = regularPrice;
@@ -31,5 +36,10 @@ public class Price {
 
     public BuyNGetMAtAPercentageSellPrice getBuyNGetMAtAPercentageSellPrice() {
         return buyNGetMAtAPercentageSellPrice;
+    }
+
+    public BigDecimal getItemTotalPrice(Item item, String name, int quantity) {
+
+        return BigDecimal.valueOf(quantity).multiply(item.getPrice().getRegularPrice());
     }
 }
