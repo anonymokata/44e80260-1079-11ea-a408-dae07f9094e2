@@ -20,6 +20,7 @@ public class CheckoutOrderTest extends formatBigDecimal{
     public void setup(){
         inventory = new Inventory();
         inventory.storeItems(new Item("Bread", 10, new Price(getFormat(1.99))));
+        inventory.storeItems(new Item("Pasta", 10, new Price(getFormat(3))));
     }
 
     @Test
@@ -42,18 +43,18 @@ public class CheckoutOrderTest extends formatBigDecimal{
 
     @Test
     public void scanningAnMarkdownItemReturnTheItemTotalPrice(){ // markdown price
-        Price price = new Price(getFormat(3));
-        Item item = new Item("Pasta", 10, price);
-        Inventory inventory = new Inventory();
-        inventory.storeItems(item);
+//        Price price = new Price(getFormat(3));
+//        Item item = new Item("Pasta", 10, price);
+//        Inventory inventory = new Inventory();
+//        inventory.storeItems(item);
 
         String name = "Pasta";
         int quantity = 4;
-        item.getPrice().setMarkdown(new Markdown(getFormat(1.00)));
-
+//        item.getPrice().setMarkdown(new Markdown(getFormat(1.00)));
+        inventory.getItemHashMap().get(name).getPrice().setMarkdown(new Markdown(getFormat(1.00)));
         CheckoutOrder checkout = new CheckoutOrder(inventory);
         Item scannedItem = checkout.scanItem(name);
-        BigDecimal actual = scannedItem.getPrice().getMarkdown().getItemTotalPriceAfterMarkdown(scannedItem, quantity);
+        BigDecimal actual = inventory.getItemHashMap().get(name).getPrice().getMarkdown().getItemTotalPriceAfterMarkdown(scannedItem, quantity);
         assertEquals(getFormat(8), getFormat(actual));
 
     }
