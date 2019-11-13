@@ -1,22 +1,16 @@
 package mainPackage;
 
-import specialPricePacakage.BuyNGetMAtAPercentageInQuantity;
-import specialPricePacakage.BuyNGetMAtAPercentageInWeight;
-import specialPricePacakage.NForXDollar;
+import specialPricePacakage.*;
 
 import java.math.BigDecimal;
 import java.math.RoundingMode;
 
 public class Price extends formatBigDecimal{
     private BigDecimal regularPrice;
-    private BigDecimal markdown;
+    private Markdown markdown;
     private NForXDollar nForXDollar;
     private BuyNGetMAtAPercentageInQuantity quantitySpecial;
     private BuyNGetMAtAPercentageInWeight weightSpecial;
-
-    public Price() {
-
-    }
 
     public Price(BigDecimal regularPrice) {
         this.regularPrice = regularPrice;
@@ -26,32 +20,23 @@ public class Price extends formatBigDecimal{
         return regularPrice;
     }
 
-    public NForXDollar getnForXDollar() {
+    public NForXDollar getNForXDollar() {
         return nForXDollar;
     }
 
-    public void setMarkdown(BigDecimal markdown) {
-        this.markdown = markdown;
-    }
-
     public BigDecimal getItemRegularTotalPrice(Item item, int quantity) {
-
         return getFormat(quantity).multiply(item.getPrice().getRegularPrice());
     }
 
-    public BigDecimal getItemTotalPriceAfterMarkdown(Item item, int quantity){
-        return item.getPrice().getRegularPrice().subtract(this.markdown).multiply(getFormat(quantity));
-    }
-
-    public void setRegularPrice(BigDecimal regularPrice) {
-        this.regularPrice = regularPrice;
-    }
-
-    public BigDecimal getMarkdown() {
+    public Markdown getMarkdown() {
         return markdown;
     }
 
-    public void setnForXDollar(NForXDollar nForXDollar) {
+    public void setMarkdown(Markdown markdown) {
+        this.markdown = markdown;
+    }
+
+    public void setNForXDollar(NForXDollar nForXDollar) {
         this.nForXDollar = nForXDollar;
     }
 

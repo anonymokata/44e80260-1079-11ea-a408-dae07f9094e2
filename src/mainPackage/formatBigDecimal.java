@@ -14,6 +14,7 @@ public class formatBigDecimal {
        return BigDecimal.valueOf(value).setScale(2, RoundingMode.HALF_UP);
     }
 
+    //overload
     protected  BigDecimal getFormat(BigDecimal value){
         return value.setScale(2, RoundingMode.HALF_UP);
     }

@@ -7,8 +7,6 @@ import specialPricePacakage.Markdown;
 import specialPricePacakage.NForXDollar;
 
 import java.math.BigDecimal;
-import java.math.RoundingMode;
-
 import static org.junit.Assert.*;
 
 public class CheckoutOrderTest extends formatBigDecimal{
@@ -20,7 +18,7 @@ public class CheckoutOrderTest extends formatBigDecimal{
         Inventory inventory = new Inventory();
         inventory.storeItems(item);
 
-        //checkout this item
+        //checkout this item with regular sell price
         String name = "Bread";
         int quantity = 10;
         CheckoutOrder checkout = new CheckoutOrder(inventory);
@@ -34,15 +32,16 @@ public class CheckoutOrderTest extends formatBigDecimal{
     public void scanningAnMarkdownItemReturnTheItemTotalPrice(){ // markdown price
         Price price = new Price(getFormat(3));
         Item item = new Item("Pasta", 10, price);
-        item.getPrice().setMarkdown(getFormat(1));
         Inventory inventory = new Inventory();
         inventory.storeItems(item);
 
         String name = "Pasta";
         int quantity = 4;
+        item.getPrice().setMarkdown(new Markdown(getFormat(1.00)));
+
         CheckoutOrder checkout = new CheckoutOrder(inventory);
         Item scannedItem = checkout.scanItem(name);
-        BigDecimal actual = scannedItem.getPrice().getItemTotalPriceAfterMarkdown(scannedItem, quantity);
+        BigDecimal actual = scannedItem.getPrice().getMarkdown().getItemTotalPriceAfterMarkdown(scannedItem, quantity);
         assertEquals(getFormat(8), getFormat(actual));
 
     }
@@ -58,11 +57,11 @@ public class CheckoutOrderTest extends formatBigDecimal{
 
         String name = "Pasta";
         int quantity = 7;
-        item.getPrice().setnForXDollar(new NForXDollar(getFormat(5), 2));
+        item.getPrice().setNForXDollar(new NForXDollar(getFormat(5), 2));
 
         CheckoutOrder checkout = new CheckoutOrder(inventory);
         Item scannedItem = checkout.scanItem(name);
-        BigDecimal actual = scannedItem.getPrice().getnForXDollar().calculateThisItemTotalPrice(scannedItem, quantity);
+        BigDecimal actual = scannedItem.getPrice().getNForXDollar().calculateThisItemTotalPrice(scannedItem, quantity);
         assertEquals(getFormat(18), getFormat(actual));
     }
 

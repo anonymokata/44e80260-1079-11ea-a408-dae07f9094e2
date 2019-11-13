@@ -6,7 +6,6 @@ import java.util.Map;
 public class Inventory {
     private Map<String, Item> itemHashMap = new HashMap<>();
 
-
     public void storeItems(Item item) {
         this.itemHashMap.put(item.getItemName(), item);
     }
@@ -16,7 +15,6 @@ public class Inventory {
     }
 
     public Item findAnItem(String name){
-        System.out.println("find the item: " + itemHashMap.containsKey(name));
         if(itemHashMap.containsKey(name)){
             return itemHashMap.get(name);
         }else{

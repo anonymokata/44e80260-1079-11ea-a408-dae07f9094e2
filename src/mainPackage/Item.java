@@ -22,6 +22,10 @@ public class Item {
         return itemName;
     }
 
+    public Price getPrice() {
+        return price;
+    }
+
     public int getItemQuantity() {
         return itemQuantity;
     }
@@ -29,9 +33,4 @@ public class Item {
     public double getItemWeight() {
         return itemWeight;
     }
-
-    public Price getPrice() {
-        return price;
-    }
-
 }
