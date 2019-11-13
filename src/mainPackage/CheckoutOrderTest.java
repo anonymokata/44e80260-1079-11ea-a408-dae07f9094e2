@@ -1,6 +1,8 @@
 package mainPackage;
 
 import org.junit.Test;
+import specialPricePacakage.BuyNGetMAtAPercentageInQuantity;
+import specialPricePacakage.BuyNGetMAtAPercentageInWeight;
 import specialPricePacakage.Markdown;
 import specialPricePacakage.NForXDollar;
 
@@ -9,9 +11,9 @@ import java.math.RoundingMode;
 
 import static org.junit.Assert.*;
 
-public class CheckoutOrderTest {
+public class CheckoutOrderTest extends formatBigDecimal{
     @Test
-    public void scanAnExistedItemReturnsTheItemTotalPrice(){
+    public void scanAnExistedItemReturnsTheItemTotalPrice(){ // regular price(without any special offer)
         //store the item
         Price price = new Price(getFormat(2));
         Item item = new Item("Bread", 10, price);
@@ -23,12 +25,13 @@ public class CheckoutOrderTest {
         int quantity = 10;
         CheckoutOrder checkout = new CheckoutOrder(inventory);
         Item scannedItem = checkout.scanItem(name);
-        assertEquals(getFormat(20), price.getItemRegularTotalPrice(scannedItem, quantity));
+        BigDecimal actual = price.getItemRegularTotalPrice(scannedItem, quantity);
+        assertEquals(getFormat(20),getFormat(actual)) ;
 
     }
 
     @Test
-    public void scanningAnMarkdownItemReturnTheItemTotalPrice(){
+    public void scanningAnMarkdownItemReturnTheItemTotalPrice(){ // markdown price
         Price price = new Price(getFormat(3));
         Item item = new Item("Pasta", 10, price);
         item.getPrice().setMarkdown(getFormat(1));
@@ -39,12 +42,13 @@ public class CheckoutOrderTest {
         int quantity = 4;
         CheckoutOrder checkout = new CheckoutOrder(inventory);
         Item scannedItem = checkout.scanItem(name);
-        assertEquals(getFormat(8.00), scannedItem.getPrice().getItemTotalPriceAfterMarkdown(scannedItem, quantity));
+        BigDecimal actual = scannedItem.getPrice().getItemTotalPriceAfterMarkdown(scannedItem, quantity);
+        assertEquals(getFormat(8), getFormat(actual));
 
     }
 
     @Test
-    public void scanningAnPackageDealReturnTheItemTotalPrice(){
+    public void scanningAnPackageDealReturnTheItemTotalPrice(){ // package deal -> N for $M
         Price price = new Price(getFormat(3));
         Item item = new Item("Pasta", 10, price);
         Inventory inventory = new Inventory();
@@ -58,17 +62,43 @@ public class CheckoutOrderTest {
 
         CheckoutOrder checkout = new CheckoutOrder(inventory);
         Item scannedItem = checkout.scanItem(name);
-        assertEquals(getFormat(18), scannedItem.getPrice().getnForXDollar().calculateThisItemTotalPrice(scannedItem, quantity));
-
+        BigDecimal actual = scannedItem.getPrice().getnForXDollar().calculateThisItemTotalPrice(scannedItem, quantity);
+        assertEquals(getFormat(18), getFormat(actual));
     }
 
+    @Test
+    public void specialOfferInQuantityReturnsTheItemTotalPrice(){ // Buy N for M at X% off
+        Price price = new Price(getFormat(1));
+        Item item = new Item("Avocado", 10, price);
+        Inventory inventory = new Inventory();
+        inventory.storeItems(item);
 
-    
-    private BigDecimal getFormat(int value){
-        return BigDecimal.valueOf(value).setScale(2, RoundingMode.HALF_UP);
+        //buy 2 get 1 for 50% off
+        String name = "Avocado";
+        int quantity = 3;
+        item.getPrice().setQuantitySpecial(new BuyNGetMAtAPercentageInQuantity(2, 1, null, 50)); //3rd param: 100% for free
+
+        CheckoutOrder checkout = new CheckoutOrder(inventory);
+        Item scannedItem = checkout.scanItem(name);
+        BigDecimal actual = scannedItem.getPrice().getQuantitySpecial().calculateThisItemTotalPrice(scannedItem, quantity);
+        assertEquals(getFormat(2.5), getFormat(actual));
     }
 
-    private BigDecimal getFormat(double value){
-        return BigDecimal.valueOf(value).setScale(2, RoundingMode.HALF_UP);
+    @Test
+    public void specialOfferInWeightReturnsTheItemTotalPrice(){  // Buy N pounds get M pounds at X% off
+        Price price = new Price(getFormat(1));
+        Item item = new Item("GroundBeef", 10.00, price);
+        Inventory inventory = new Inventory();
+        inventory.storeItems(item);
+
+        //buy 2 pounds get 1 pound 50% off
+        String name = "GroundBeef";
+        double weight = 5.5;
+        item.getPrice().setWeightSpecial(new BuyNGetMAtAPercentageInWeight(2, 1, 50));
+        CheckoutOrder checkout = new CheckoutOrder(inventory);
+        Item scannedItem = checkout.scanItem(name);
+        BigDecimal actual = scannedItem.getPrice().getWeightSpecial().calculateThisItemTotalPrice(scannedItem, weight);
+        assertEquals(getFormat(5.00), getFormat(actual));
     }
+
 }

@@ -1,12 +1,12 @@
 package specialPricePacakage;
 
 import mainPackage.Item;
-import mainPackage.Price;
+import mainPackage.formatBigDecimal;
 
 import java.math.BigDecimal;
 import java.math.RoundingMode;
 
-public class NForXDollar {
+public class NForXDollar extends formatBigDecimal {
     private BigDecimal packagePrice;
     private double initialPackageDeal;
     private BigDecimal itemTotalPrice;

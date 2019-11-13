@@ -1,18 +1,18 @@
 package mainPackage;
 
-import specialPricePacakage.BuyNGetMAtAPercentageSellPrice;
-import specialPricePacakage.Markdown;
+import specialPricePacakage.BuyNGetMAtAPercentageInQuantity;
+import specialPricePacakage.BuyNGetMAtAPercentageInWeight;
 import specialPricePacakage.NForXDollar;
 
 import java.math.BigDecimal;
 import java.math.RoundingMode;
 
-public class Price {
+public class Price extends formatBigDecimal{
     private BigDecimal regularPrice;
     private BigDecimal markdown;
     private NForXDollar nForXDollar;
-    private BuyNGetMAtAPercentageSellPrice buyNGetMAtAPercentageSellPrice;
-    private BigDecimal itemTotalPrice;
+    private BuyNGetMAtAPercentageInQuantity quantitySpecial;
+    private BuyNGetMAtAPercentageInWeight weightSpecial;
 
     public Price() {
 
@@ -43,24 +43,31 @@ public class Price {
         return item.getPrice().getRegularPrice().subtract(this.markdown).multiply(getFormat(quantity));
     }
 
-
-    private BigDecimal getFormat(int value){
-        return BigDecimal.valueOf(value).setScale(2, RoundingMode.HALF_UP);
-    }
-
     public void setRegularPrice(BigDecimal regularPrice) {
         this.regularPrice = regularPrice;
+    }
+
+    public BigDecimal getMarkdown() {
+        return markdown;
     }
 
     public void setnForXDollar(NForXDollar nForXDollar) {
         this.nForXDollar = nForXDollar;
     }
 
-    public void setBuyNGetMAtAPercentageSellPrice(BuyNGetMAtAPercentageSellPrice buyNGetMAtAPercentageSellPrice) {
-        this.buyNGetMAtAPercentageSellPrice = buyNGetMAtAPercentageSellPrice;
+    public BuyNGetMAtAPercentageInQuantity getQuantitySpecial() {
+        return quantitySpecial;
     }
 
-    public void setItemTotalPrice(BigDecimal itemTotalPrice) {
-        this.itemTotalPrice = itemTotalPrice;
+    public void setQuantitySpecial(BuyNGetMAtAPercentageInQuantity quantitySpecial) {
+        this.quantitySpecial = quantitySpecial;
+    }
+
+    public BuyNGetMAtAPercentageInWeight getWeightSpecial() {
+        return weightSpecial;
+    }
+
+    public void setWeightSpecial(BuyNGetMAtAPercentageInWeight weightSpecial) {
+        this.weightSpecial = weightSpecial;
     }
 }

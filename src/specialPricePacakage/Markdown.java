@@ -2,11 +2,12 @@ package specialPricePacakage;
 
 import mainPackage.Item;
 import mainPackage.Price;
+import mainPackage.formatBigDecimal;
 
 import java.math.BigDecimal;
 import java.math.RoundingMode;
 
-public class Markdown {
+public class Markdown extends formatBigDecimal {
     private BigDecimal markdownPrice;
 
     public BigDecimal getPriceAfterMarkdown(Item item, int quantity){
@@ -22,7 +23,4 @@ public class Markdown {
         this.markdownPrice = markdownPrice;
     }
 
-    private BigDecimal getFormat(int value){
-        return BigDecimal.valueOf(value).setScale(2, RoundingMode.HALF_UP);
-    }
 }
