@@ -1,9 +1,7 @@
 package specialPricePacakage;
 
 import mainPackage.Item;
-import mainPackage.Price;
 import mainPackage.formatBigDecimal;
-
 import java.math.BigDecimal;
 
 public class BuyNGetMAtAPercentageInWeight extends formatBigDecimal {
@@ -18,13 +16,13 @@ public class BuyNGetMAtAPercentageInWeight extends formatBigDecimal {
         this.discountPercentage = discountPercentage;
     }
 
-    public BigDecimal calculateThisItemTotalPrice(Item item, double weight){
+    public BigDecimal calculatePrice(Item item, double weight){
         double weightCount = 0;
         double specialWeightCount = 0;
         double tempWeight;
 
         if ((this.initialWeight + this.freeWeight > weight)) { // if not qualify for free offers
-            return getFormat(weight).multiply(item.getPrice().getRegularPrice());
+            return getFormat(weight).multiply(item.getItemPrice());
         } else {   // if qualify for free offers
             tempWeight = weight;
             specialWeightCount = getSpecialCounter(tempWeight, specialWeightCount);
@@ -40,7 +38,7 @@ public class BuyNGetMAtAPercentageInWeight extends formatBigDecimal {
     }
 
     private BigDecimal getItemTotalPrice(Item item, double counter, double specialWeightCounter) {
-        return item.getPrice().getRegularPrice().multiply(getFormat(counter)).add(getPriceForThoseItemsQualifySpecialOffer(item, specialWeightCounter));
+        return item.getItemPrice().multiply(getFormat(counter)).add(getPriceForThoseItemsQualifySpecialOffer(item, specialWeightCounter));
     }
 
     private double getSpecialCounter(double weight, double specialCount) {

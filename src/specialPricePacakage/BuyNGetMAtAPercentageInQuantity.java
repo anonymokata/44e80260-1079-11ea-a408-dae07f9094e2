@@ -1,31 +1,30 @@
 package specialPricePacakage;
 
 import mainPackage.Item;
-import mainPackage.Price;
 import mainPackage.formatBigDecimal;
 
 import java.math.BigDecimal;
-import java.math.RoundingMode;
+
 
 public class BuyNGetMAtAPercentageInQuantity extends formatBigDecimal {
     private int initialQuantity;
     private int freeQuantity;
+    private Double discountPercentage;
     private Integer limitByQuantity;
-    private double discountPercentage;
 
-    public BuyNGetMAtAPercentageInQuantity(int initialQuantity, int freeQuantity, Integer limitByQuantity, double discountPercentage) {
+    public BuyNGetMAtAPercentageInQuantity(int initialQuantity, int freeQuantity, Double discountPercentage, Integer limitByQuantity) {
         this.initialQuantity = initialQuantity;
         this.freeQuantity = freeQuantity;
-        this.limitByQuantity = limitByQuantity;
         this.discountPercentage = discountPercentage;
+        this.limitByQuantity = limitByQuantity;
     }
 
-    public BigDecimal calculateThisItemTotalPrice(Item item, int quantity) {
+    public BigDecimal calculatePrice(Item item, int quantity) {
         int counter = 0;
         int specialCounter = 0;
         int tempQuantity = 0;
         if (initialQuantity + freeQuantity > quantity) { //if not qualify for special offers
-           return item.getPrice().getRegularPrice().multiply(getFormat(quantity));
+           return item.getItemPrice().multiply(getFormat(quantity));
 
         } else {    //if qualify for special offers
             if (this.limitByQuantity == null) { //without special offer limitation
@@ -55,12 +54,12 @@ public class BuyNGetMAtAPercentageInQuantity extends formatBigDecimal {
     }
 
     private BigDecimal getItemTotalPrice(Item item, int counter, int specialCounter) {
-        return item.getPrice().getRegularPrice().multiply(getFormat(counter)).add(calculatePriceQuantifySpecialOffer(item, specialCounter));
+        return item.getItemPrice().multiply(getFormat(counter)).add(calculatePriceQuantifySpecialOffer(item, specialCounter));
 
     }
 
     private BigDecimal calculatePriceQuantifySpecialOffer(Item item, int specialCounter) {
-        return getFormat(specialCounter).multiply(item.getPrice().getRegularPrice().multiply(BigDecimal.valueOf((100 - this.discountPercentage) / 100)));
+        return getFormat(specialCounter).multiply(item.getItemPrice().multiply(BigDecimal.valueOf((100 - this.discountPercentage) / 100)));
     }
 
 }

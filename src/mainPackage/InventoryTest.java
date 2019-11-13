@@ -10,11 +10,11 @@ import static org.junit.Assert.*;
 public class InventoryTest extends formatBigDecimal{
     @Test
     public void storeAnItemReturnTheItemFromInventory(){
-        Price price = new Price(getFormat(2));
-        Item item = new Item("Bread", 10, price);
+
+        Item item = new Item("Bread", 10, getFormat(2));
         Inventory inventory = new Inventory();
         inventory.storeItems(item);
         assertTrue(inventory.getItemHashMap().containsKey("Bread"));
-        assertEquals(getFormat(2), inventory.getItemHashMap().get(item.getItemName()).getPrice().getRegularPrice());
+        assertEquals(getFormat(2), inventory.getItemHashMap().get(item.getItemName()).getItemPrice());
     }
 }
