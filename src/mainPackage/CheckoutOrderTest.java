@@ -34,7 +34,7 @@ public class CheckoutOrderTest extends formatBigDecimal{
         int quantity = 10;
 
         Item scannedItem = checkout.scanItem(name);
-        BigDecimal actual = inventory.getItemHashMap().get(name).getPrice().getItemRegularTotalPrice(scannedItem, quantity);
+        BigDecimal actual = getPrice(name).getItemRegularTotalPrice(scannedItem, quantity);
         assertEquals(getFormat(19.90),getFormat(actual)) ;
 
     }
@@ -44,24 +44,23 @@ public class CheckoutOrderTest extends formatBigDecimal{
 
         String name = "Pasta";
         int quantity = 4;
-        inventory.getItemHashMap().get(name).getPrice().setMarkdown(new Markdown(getFormat(1.00)));
+        getPrice(name).setMarkdown(new Markdown(getFormat(1.00)));
 
         Item scannedItem = checkout.scanItem(name);
-        BigDecimal actual = inventory.getItemHashMap().get(name).getPrice().getMarkdown().getItemTotalPriceAfterMarkdown(scannedItem, quantity);
+        BigDecimal actual = getPrice(name).getMarkdown().getItemTotalPriceAfterMarkdown(scannedItem, quantity);
         assertEquals(getFormat(8), getFormat(actual));
 
     }
 
     @Test
     public void scanningAnPackageDealReturnTheItemTotalPrice(){ // package deal -> N for $M
-
         //2 for $5
         String name = "Bacon";
         int quantity = 7;
-        inventory.getItemHashMap().get(name).getPrice().setNForXDollar(new NForXDollar(getFormat(5), 2));
+        getPrice(name).setNForXDollar(new NForXDollar(getFormat(5), 2));
 
         Item scannedItem = checkout.scanItem(name);
-        BigDecimal actual = inventory.getItemHashMap().get(name).getPrice().getNForXDollar().calculateThisItemTotalPrice(scannedItem, quantity);
+        BigDecimal actual = getPrice(name).getNForXDollar().calculateThisItemTotalPrice(scannedItem, quantity);
         assertEquals(getFormat(18), getFormat(actual));
     }
 
@@ -71,10 +70,10 @@ public class CheckoutOrderTest extends formatBigDecimal{
         //buy 2 get 1 for 50% off
         String name = "Avocado";
         int quantity = 3;
-        inventory.getItemHashMap().get(name).getPrice().setQuantitySpecial(new BuyNGetMAtAPercentageInQuantity(2, 1, null, 50)); //3rd param: 100% for free
+        getPrice(name).setQuantitySpecial(new BuyNGetMAtAPercentageInQuantity(2, 1, null, 50)); //3rd param: 100% for free
 
         Item scannedItem = checkout.scanItem(name);
-        BigDecimal actual =  inventory.getItemHashMap().get(name).getPrice().getQuantitySpecial().calculateThisItemTotalPrice(scannedItem, quantity);
+        BigDecimal actual =  getPrice(name).getQuantitySpecial().calculateThisItemTotalPrice(scannedItem, quantity);
         assertEquals(getFormat(2.5), getFormat(actual));
     }
 
@@ -84,11 +83,16 @@ public class CheckoutOrderTest extends formatBigDecimal{
         //buy 2 pounds get 1 pound 50% off
         String name = "GroundBeef";
         double weight = 5.5;
-        inventory.getItemHashMap().get(name).getPrice().setWeightSpecial(new BuyNGetMAtAPercentageInWeight(2, 1, 50));
+        getPrice(name).setWeightSpecial(new BuyNGetMAtAPercentageInWeight(2, 1, 50));
 
         Item scannedItem = checkout.scanItem(name);
-        BigDecimal actual = inventory.getItemHashMap().get(name).getPrice().getWeightSpecial().calculateThisItemTotalPrice(scannedItem, weight);
+        BigDecimal actual = getPrice(name).getWeightSpecial().calculateThisItemTotalPrice(scannedItem, weight);
         assertEquals(getFormat(5.00), getFormat(actual));
+    }
+
+
+    private Price getPrice(String name) {
+        return inventory.getItemHashMap().get(name).getPrice();
     }
 
 }
