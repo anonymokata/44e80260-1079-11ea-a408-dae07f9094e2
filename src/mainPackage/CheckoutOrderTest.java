@@ -1,5 +1,6 @@
 package mainPackage;
 
+import org.junit.Before;
 import org.junit.Test;
 import specialPricePacakage.BuyNGetMAtAPercentageInQuantity;
 import specialPricePacakage.BuyNGetMAtAPercentageInWeight;
@@ -10,21 +11,32 @@ import java.math.BigDecimal;
 import static org.junit.Assert.*;
 
 public class CheckoutOrderTest extends formatBigDecimal{
+    private Inventory inventory;
+    private Item item;
+    private Price price;
+    private CheckoutOrder checkout;
+
+    @Before
+    public void setup(){
+        inventory = new Inventory();
+        inventory.storeItems(new Item("Bread", 10, new Price(getFormat(1.99))));
+    }
+
     @Test
     public void scanAnExistedItemReturnsTheItemTotalPrice(){ // regular price(without any special offer)
         //store the item
-        Price price = new Price(getFormat(2));
-        Item item = new Item("Bread", 10, price);
-        Inventory inventory = new Inventory();
-        inventory.storeItems(item);
+//        Price price = new Price(getFormat(2));
+//        Item item = new Item("Bread", 10, price);
+//        Inventory inventory = new Inventory();
+//        inventory.storeItems(item);
 
         //checkout this item with regular sell price
         String name = "Bread";
         int quantity = 10;
         CheckoutOrder checkout = new CheckoutOrder(inventory);
         Item scannedItem = checkout.scanItem(name);
-        BigDecimal actual = price.getItemRegularTotalPrice(scannedItem, quantity);
-        assertEquals(getFormat(20),getFormat(actual)) ;
+        BigDecimal actual = inventory.getItemHashMap().get(name).getPrice().getItemRegularTotalPrice(scannedItem, quantity);
+        assertEquals(getFormat(19.90),getFormat(actual)) ;
 
     }
 

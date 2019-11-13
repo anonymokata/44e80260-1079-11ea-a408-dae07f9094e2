@@ -6,6 +6,7 @@ import java.util.Map;
 public class Inventory {
     private Map<String, Item> itemHashMap = new HashMap<>();
 
+
     public void storeItems(Item item) {
         this.itemHashMap.put(item.getItemName(), item);
     }
