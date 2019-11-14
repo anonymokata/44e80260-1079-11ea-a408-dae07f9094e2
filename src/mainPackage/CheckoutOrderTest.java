@@ -78,25 +78,25 @@ public class CheckoutOrderTest extends formatBigDecimal {
 
     }
 
-//    @Test
-//    public void specialOfferInQuantityReturnsTheItemTotalPrice() { // Buy N for M at X% off, with or without limitation
-//        String name = "Avocado";
-//
-//        inventory.setBuyNGetMAtAPercentageInQuantity(name, 2, 1, true);//buy 2 get 1 for free
-//        Item scannedItem = checkout.scanItem(name);
-//        BigDecimal actual1 = getSpecialPrice(name).getQuantitySpecial().calculatePrice(scannedItem, 3);
-//        assertEquals(getFormat(2), getFormat(actual1));
-//
-//        inventory.setBuyNGetMAtAPercentageInQuantity(name, 2, 1, 50.00, true);//buy 2 get 1 for 50% off
-//        BigDecimal actual2 = getSpecialPrice(name).getQuantitySpecial().calculatePrice(scannedItem, 3);
-//        assertEquals(getFormat(2.50), getFormat(actual2));
-//
-//        inventory.setBuyNGetMAtAPercentageInQuantity(name, 2, 1, 50.00, 6, true); //buy 2 get 1 for 50% off with a limitation of 6
-//        BigDecimal actual3 = getSpecialPrice(name).getQuantitySpecial().calculatePrice(scannedItem, 7);
-//        assertEquals(getFormat(6), getFormat(actual3));
-//
-//    }
-//
+    @Test
+    public void specialOfferInQuantityReturnsTheItemTotalPrice() { // Buy N for M at X% off, with or without limitation
+        String name1 = "Avocado";
+        inventory.setBuyNGetMAtAPercentage(name1, 2, 1, true);//buy 2 get 1 for free
+
+        checkout.scanItem(name1, 6);
+        BigDecimal actual1 = checkout.getTotalPrice();
+        assertEquals(getFormat(4), getFormat(actual1));
+
+        inventory.setBuyNGetMAtAPercentage(name1, 2, 1, 50.00, true);//buy 2 get 1 for 50% off
+        BigDecimal actual2 = checkout.getTotalPrice();
+        assertEquals(getFormat(5), getFormat(actual2));
+
+        inventory.setBuyNGetMAtAPercentage(name1, 1, 1, 50.00, 4, true); //buy 1 get 1 for 50% off with a limitation of 4
+        BigDecimal actual3 = checkout.getTotalPrice();
+        assertEquals(getFormat(5), getFormat(actual3));
+
+    }
+
 //    @Test
 //    public void specialOfferInWeightReturnsTheItemTotalPrice(){  // Buy N pounds get M pounds at X% off
 //        String name = "Ground Beef";

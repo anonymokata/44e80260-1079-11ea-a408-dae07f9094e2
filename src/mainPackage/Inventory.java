@@ -43,37 +43,40 @@ public class Inventory {
     }
 
     //NForXDollar: weight params
-    public void setNForXDollarSpecial(String name, double packageWeight, BigDecimal packagePrice){
+    public void setNForXDollarSpecial(String name, double packageWeight, BigDecimal packagePrice, boolean isSpecial){
         Item item = findItem(name);
+        item.setSpecial(isSpecial);
         item.setSpecialPrice(new NForXDollar(packageWeight, packagePrice));
     }
 
 
     //BuyNGetMAtAPercentage: quantity params
-    public void setBuyNGetMAtAPercentage(String name, int initialQuantity, int freeQuantity){ //in quantity
-        setBuyNGetMAtAPercentage(name, initialQuantity, freeQuantity, null);
+    public void setBuyNGetMAtAPercentage(String name, int initialQuantity, int freeQuantity, boolean isSpecial){ //in quantity
+        setBuyNGetMAtAPercentage(name, initialQuantity, freeQuantity, null, isSpecial);
     }
 
-    public void setBuyNGetMAtAPercentage(String name, int initialQuantity, int freeQuantity, Double discountPercentage){
-        setBuyNGetMAtAPercentage(name, initialQuantity, freeQuantity, discountPercentage, null);
+    public void setBuyNGetMAtAPercentage(String name, int initialQuantity, int freeQuantity, Double discountPercentage, boolean isSpecial){
+        setBuyNGetMAtAPercentage(name, initialQuantity, freeQuantity, discountPercentage, null, isSpecial);
     }
 
-    public void setBuyNGetMAtAPercentage(String name, int initialQuantity, int freeQuantity, Double discountPercentage, Integer limit){
+    public void setBuyNGetMAtAPercentage(String name, int initialQuantity, int freeQuantity, Double discountPercentage, Integer limit, boolean isSpecial){
         Item item = findItem(name);
+        item.setSpecial(isSpecial);
         item.setSpecialPrice(new BuyNGetMAtAPercentage(initialQuantity, freeQuantity, discountPercentage, limit));
     }
 
     //uyNGetMAtAPercentage: weight params
-    public void setBuyNGetMAtAPercentage(String name, double initialWeight, double freeWeight){ //in quantity
-        setBuyNGetMAtAPercentage(name, initialWeight, freeWeight, null);
+    public void setBuyNGetMAtAPercentage(String name, double initialWeight, double freeWeight, boolean isSpecial){ //in quantity
+        setBuyNGetMAtAPercentage(name, initialWeight, freeWeight, null, isSpecial);
     }
 
-    public void setBuyNGetMAtAPercentage(String name,double initialWeight, double freeWeight, Double discountPercentage){
-        setBuyNGetMAtAPercentage(name, initialWeight, freeWeight, discountPercentage, null);
+    public void setBuyNGetMAtAPercentage(String name,double initialWeight, double freeWeight, Double discountPercentage, boolean isSpecial){
+        setBuyNGetMAtAPercentage(name, initialWeight, freeWeight, discountPercentage, null, isSpecial);
     }
 
-    public void setBuyNGetMAtAPercentage(String name, double initialWeight, double freeWeight,Double discountPercentage, Integer limit){
+    public void setBuyNGetMAtAPercentage(String name, double initialWeight, double freeWeight,Double discountPercentage, Integer limit, boolean isSpecial){
         Item item = findItem(name);
+        item.setSpecial(isSpecial);
         item.setSpecialPrice(new BuyNGetMAtAPercentage(initialWeight, freeWeight, discountPercentage, limit));
     }
 
