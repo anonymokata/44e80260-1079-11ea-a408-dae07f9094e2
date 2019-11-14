@@ -15,30 +15,19 @@ public class CheckoutOrder extends formatBigDecimal {
     }
 
     public void scanItem(String name) {
-        Item item = inventory.findItem(name);
-        if(item.isInWeight()){
-            scanItem(item, 0, 1.00);
-        }
-        scanItem(item, 1, 0);
+        scanItem(name, 1, 0);
     }
 
     public void scanItem(String name, int quantity) {
-        Item item = inventory.findItem(name);
-        if(item.isInWeight()){
-            scanItem(item, 0, quantity);
-        }
-        scanItem(item, quantity, 0);
+        scanItem(name, quantity, 0);
     }
 
     public void scanItem(String name, double weight) {
-        Item item = inventory.findItem(name);
-        if(!item.isInWeight()){
-            scanItem(item, (int)weight, 0);
-        }
-        scanItem(item, 0, weight);
+        scanItem(name, 0, weight);
     }
 
-    public Item scanItem(Item item, int quantity, double weight) {
+    public Item scanItem(String name, int quantity, double weight) {
+        Item item = inventory.findItem(name);
         if (isExist(item)) {
             if (item.isInWeight()) {
                 getUpdatedWeight(item, weight);
@@ -113,7 +102,6 @@ public class CheckoutOrder extends formatBigDecimal {
         }
         return sum;
     }
-//
 
 
 
@@ -168,18 +156,18 @@ public class CheckoutOrder extends formatBigDecimal {
 
     private void testMethod() {
         int count = 0;
-        System.out.println("size in Weight Map: " + scannedItemsInWeight.size());
+//        System.out.println("size in Quantity Map: " + scannedItemsInQuantity.size());
         for(Map.Entry<Item, Integer> testMap : scannedItemsInQuantity.entrySet()) {
             count++;
-            System.out.print(count + ": " + testMap.getKey().toString());
-            System.out.println("         quantity: "+ testMap.getValue());
+//            System.out.print(count + ": " + testMap.getKey().toString());
+//            System.out.println("         quantity: "+ testMap.getValue());
 
         }
+//        System.out.println("size in Weight Map: " + scannedItemsInWeight.size());
         for(Map.Entry<Item, Double> testMap : scannedItemsInWeight.entrySet()) {
             count++;
             System.out.print(count + ": " + testMap.getKey().toString());
             System.out.println("           weight: "+ testMap.getValue());
-
         }
     }
 }

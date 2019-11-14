@@ -79,9 +79,8 @@ public class CheckoutOrderTest extends formatBigDecimal {
     }
 
     @Test
-    public void specialOfferReturnsTheItemTotalPriceInQuantity() { // Buy N for M at X% off, with or without limitation
+    public void specialOfferReturnsTheItemTotalPrice() { // Buy N for M at X% off, with or without limitation
         String name1 = "Avocado";
-        String name2 = "Apple";
         inventory.setBuyNGetMAtAPercentage(name1, 2, 1, true);//buy 2 get 1 for free
 
         checkout.scanItem(name1, 6);
@@ -96,29 +95,18 @@ public class CheckoutOrderTest extends formatBigDecimal {
         BigDecimal actual3 = checkout.getTotalPrice();
         assertEquals(getFormat(5), getFormat(actual3));
 
-        checkout.scanItem(name2, 5.00); // scan more item to test the updated total price
+        String name2 = "Ground Beef";
+        inventory.setBuyNGetMAtAPercentage(name2, 2.00, 1.00, 50.00, 6, true); //buy 2 pounds get 1 pound for half off with a limitation of 6
+
+        checkout.scanItem(name2, 7.00);
         BigDecimal actual4 = checkout.getTotalPrice();
-        assertEquals(getFormat(8.45), getFormat(actual4));
+        assertEquals(getFormat(14), getFormat(actual4));
+
+//        String name3 = "Apple";
+//        checkout.scanItem(name3, 5.00); // scan more item to test the updated total price
+//        BigDecimal actual5 = checkout.getTotalPrice();
+//        assertEquals(getFormat(8.45), getFormat(actual5));
 
     }
-
-//    @Test
-//    public void specialOfferReturnsTheItemTotalPriceInWeight(){  // Buy N pounds get M pounds at X% off
-//        String name = "Ground Beef";
-//
-//        inventory.setBuyNGetMAtAPercentage(name, 2, 1, true); // Buy 2 pounds get 1 pound for free
-//        Item scannedItem = checkout.scanItem(name);
-//        BigDecimal actual1 = getSpecialPrice(name).getWeightSpecial().calculatePrice(scannedItem, 5.50);
-//        assertEquals(getFormat(5.63), getFormat(actual1));
-//
-//        inventory.setBuyNGetMAtAPercentageInWeight(name, 3, 1, 75.00, true);
-//        BigDecimal actual2 = getSpecialPrice(name).getWeightSpecial().calculatePrice(scannedItem, 5);
-//        assertEquals(getFormat(5.31), getFormat(actual2));
-//
-//    }
-//
-//    private SpecialPrice getSpecialPrice(String name) {
-//        return inventory.getItemHashMap().get(name).getSpecialPrice();
-//    }
 
 }
