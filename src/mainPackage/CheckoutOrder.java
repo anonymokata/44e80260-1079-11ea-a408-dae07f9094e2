@@ -15,25 +15,35 @@ public class CheckoutOrder extends formatBigDecimal {
     }
 
     public void scanItem(String name) {
-        scanItem(name, 1, 0);
+        Item item = inventory.findItem(name);
+        if(item.isInWeight()){
+            scanItem(item, 0, 1.00);
+        }
+        scanItem(item, 1, 0);
     }
 
     public void scanItem(String name, int quantity) {
-        scanItem(name, quantity, 0);
+        Item item = inventory.findItem(name);
+        if(item.isInWeight()){
+            scanItem(item, 0, quantity);
+        }
+        scanItem(item, quantity, 0);
     }
 
     public void scanItem(String name, double weight) {
-        scanItem(name, 0, weight);
+        Item item = inventory.findItem(name);
+        if(!item.isInWeight()){
+            scanItem(item, (int)weight, 0);
+        }
+        scanItem(item, 0, weight);
     }
 
-    public Item scanItem(String name, int quantity, double weight) {
-        Item item = inventory.findItem(name);
-        System.out.println("Is item exist: " + isExist(item));
+    public Item scanItem(Item item, int quantity, double weight) {
         if (isExist(item)) {
             if (item.isInWeight()) {
-                getUpdatedWeight(name, item, weight);
+                getUpdatedWeight(item, weight);
             }
-            getUpdatedQuantity(name, item, quantity);
+            getUpdatedQuantity(item, quantity);
         } else {
             storeItem(item, quantity, weight);
         }
@@ -41,7 +51,6 @@ public class CheckoutOrder extends formatBigDecimal {
     }
 
     public void storeItem(Item item, int quantity, double weight) {
-        System.out.println("Is in weight : "+ item.isInWeight());
         if (item.isInWeight()) {
             scannedItemsInWeight.put(item, weight);
             testMethod();
@@ -52,12 +61,12 @@ public class CheckoutOrder extends formatBigDecimal {
         }
     }
 
-    private void getUpdatedQuantity(String name, Item item, int quantity) {
-        Integer count = scannedItemsInQuantity.get(name);
+    private void getUpdatedQuantity(Item item, int quantity) {
+        Integer count = scannedItemsInQuantity.get(item);
         if (count == null) {
-            scannedItemsInQuantity.put(item, quantity);
+            scannedItemsInQuantity.replace(item, quantity);
         }
-        scannedItemsInQuantity.put(item, count + quantity);
+        scannedItemsInQuantity.replace(item, count + quantity);
     }
 
     public boolean isExist(Item item) {
@@ -67,12 +76,12 @@ public class CheckoutOrder extends formatBigDecimal {
         return false;
     }
 
-    private void getUpdatedWeight(String name, Item item, double weight) {
-        Double count = scannedItemsInWeight.get(name);
+    private void getUpdatedWeight(Item item, double weight) {
+        Double count = scannedItemsInWeight.get(item);
         if (count == null) {
-            scannedItemsInWeight.put(item, weight);
+            scannedItemsInWeight.replace(item, weight);
         } else {
-            scannedItemsInWeight.put(item, count + weight);
+            scannedItemsInWeight.replace(item, count + weight);
         }
     }
 
@@ -159,16 +168,18 @@ public class CheckoutOrder extends formatBigDecimal {
 
     private void testMethod() {
         int count = 0;
-        System.out.println("size: "+ scannedItemsInQuantity.size());
         System.out.println("size in Weight Map: " + scannedItemsInWeight.size());
         for(Map.Entry<Item, Integer> testMap : scannedItemsInQuantity.entrySet()) {
             count++;
-            System.out.println(count + ": " + testMap.getKey().toString());
+            System.out.print(count + ": " + testMap.getKey().toString());
+            System.out.println("         quantity: "+ testMap.getValue());
 
         }
         for(Map.Entry<Item, Double> testMap : scannedItemsInWeight.entrySet()) {
             count++;
-            System.out.println(count + ": " + testMap.getKey().toString());
+            System.out.print(count + ": " + testMap.getKey().toString());
+            System.out.println("           weight: "+ testMap.getValue());
+
         }
     }
 }
