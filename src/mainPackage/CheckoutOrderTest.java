@@ -59,7 +59,7 @@ public class CheckoutOrderTest extends formatBigDecimal {
     }
 
     @Test
-    public void specialOfferInQuantityReturnsTheItemTotalPrice() { // Buy N for M at X% off
+    public void specialOfferInQuantityReturnsTheItemTotalPrice() { // Buy N for M at X% off, with or without limitation
         String name = "Avocado";
 
         inventory.setBuyNGetMAtAPercentageInQuantity(name, 2, 1);//buy 2 get 1 for free
@@ -85,6 +85,10 @@ public class CheckoutOrderTest extends formatBigDecimal {
         Item scannedItem = checkout.scanItem(name);
         BigDecimal actual1 = getSpecialPrice(name).getWeightSpecial().calculatePrice(scannedItem, 5.50);
         assertEquals(getFormat(5.63), getFormat(actual1));
+
+        inventory.setBuyNGetMAtAPercentageInWeight(name, 3, 1, 75.00);
+        BigDecimal actual2 = getSpecialPrice(name).getWeightSpecial().calculatePrice(scannedItem, 5);
+        assertEquals(getFormat(5.31), getFormat(actual2));
 
     }
 

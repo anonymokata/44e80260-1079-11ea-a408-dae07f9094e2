@@ -37,10 +37,6 @@ public class BuyNGetMAtAPercentageInWeight extends formatBigDecimal {
         }
     }
 
-    private BigDecimal getPriceForThoseItemsQualifySpecialOffer(Item item, double specialWeightCounter) {
-        return getFormat(getFormat(specialWeightCounter).multiply(BigDecimal.valueOf((100 - this.discountPercentage) / 100)));
-    }
-
     private BigDecimal getItemTotalPrice(Item item, double counter, double specialWeightCounter) {
         return item.getItemPrice().multiply(getFormat(counter)).add(getPriceForThoseItemsQualifySpecialOffer(item, specialWeightCounter));
     }
@@ -52,5 +48,9 @@ public class BuyNGetMAtAPercentageInWeight extends formatBigDecimal {
             }
         }
         return specialCount;
+    }
+
+    private BigDecimal getPriceForThoseItemsQualifySpecialOffer(Item item, double specialWeightCounter) {
+        return item.getItemPrice().multiply(getFormat(getFormat(specialWeightCounter)).multiply(BigDecimal.valueOf((100 - this.discountPercentage) / 100)));
     }
 }
