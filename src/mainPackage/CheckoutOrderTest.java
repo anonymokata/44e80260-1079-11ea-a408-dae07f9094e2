@@ -2,7 +2,6 @@ package mainPackage;
 
 import org.junit.Before;
 import org.junit.Test;
-import specialPricePacakage.BuyNGetMAtAPercentageInWeight;
 
 import java.math.BigDecimal;
 
@@ -15,56 +14,56 @@ public class CheckoutOrderTest extends formatBigDecimal {
     @Before
     public void setup() {
         inventory = new Inventory();
-        inventory.storeItems(new Item("Bread", 10, false, getFormat(1.99)));
-        inventory.storeItems(new Item("Pasta", 10, false, getFormat(3)));
-        inventory.storeItems(new Item("Bacon", 10, false, getFormat(3)));
-        inventory.storeItems(new Item("Avocado", 10, false, getFormat(1)));
-        inventory.storeItems(new Item("Ground Beef", true, getFormat(1.25)));
-        inventory.storeItems(new Item("Organic Chicken", true, getFormat(3.59)));
-        inventory.storeItems(new Item("Small Green Onion", false, getFormat(0.59)));
-        inventory.storeItems(new Item("Broccoli", true, getFormat(0.99)));
-        inventory.storeItems(new Item("Apple", true, getFormat(0.69)));
-        inventory.storeItems(new Item("Ice Cream", false, getFormat(1.99)));
-        inventory.storeItems(new Item("Grape", true, getFormat(0.99)));
+        inventory.storeItems(new Item("Bread", false, getFormat(1.99), false));
+        inventory.storeItems(new Item("Pasta", false, getFormat(3), false));
+        inventory.storeItems(new Item("Bacon", false, getFormat(3), false));
+        inventory.storeItems(new Item("Avocado", false, getFormat(1), false));
+        inventory.storeItems(new Item("Ground Beef", true, getFormat(1.50), false));
+        inventory.storeItems(new Item("Organic Chicken", true, getFormat(3.59), false));
+        inventory.storeItems(new Item("Small Green Onion", false, getFormat(0.59), false));
+        inventory.storeItems(new Item("Broccoli", true, getFormat(0.99), false));
+        inventory.storeItems(new Item("Apple", true, getFormat(0.69), false));
+        inventory.storeItems(new Item("Ice Cream", false, getFormat(1.99), false));
+        inventory.storeItems(new Item("Grape", true, getFormat(0.99), false));
 
         checkout = new CheckoutOrder(inventory);
     }
 
     @Test
     public void scanAnExistedItemReturnsTheUpdatedTotalPrice() { // regular price(without any special offer)
-        checkout.scanItem("Bread", 3); //test result in quantity
-        BigDecimal actual1 = checkout.getTotalPrice();
-        assertEquals(getFormat(5.97), getFormat(actual1));
+        inventory.setMarkdown("Ground Beef", getFormat(0.50), true); // markdown $0.50
 
-        checkout.scanItem("Ground Beef", 2.50); //test result in weight
-        BigDecimal actual2 = checkout.getTotalPrice();
-        assertEquals(getFormat(9.10), getFormat(actual2));
+        checkout.scanItem("Bread", 3); //test result in quantity
+        checkout.scanItem("Ground Beef", 2.00);
+
+        BigDecimal actual1 = checkout.getTotalPrice();
+        assertEquals(getFormat(7.97), getFormat(actual1));
 
         checkout.removeItem("Bread", 1);//remove 1 bag of bread
         BigDecimal actual3 = checkout.getTotalPrice();
-        assertEquals(getFormat(7.11), getFormat(actual3));
+        assertEquals(getFormat(5.98), getFormat(actual3));
 
         checkout.removeItem("Ice Cream", false); //remove item that is not in the cart
         BigDecimal actual4 = checkout.getTotalPrice();
-        assertEquals(getFormat(7.11), getFormat(actual4));
+        assertEquals(getFormat(5.98), getFormat(actual4));
 
         checkout.removeItem("Bread", true); //remove all bread
         BigDecimal actual5 = checkout.getTotalPrice();
-        assertEquals(getFormat(3.13), getFormat(actual5));
+        assertEquals(getFormat(2.00), getFormat(actual5));
 
-       
+
 
     }
 
 //    @Test
 //    public void scanningAnMarkdownItemReturnTheItemTotalPrice() { // markdown price
-//        inventory.setMarkdown("Pasta", getFormat(0.50), true); // markdown $0.50
+//        inventory.setMarkdown("Ground Beef", getFormat(0.50), true); // markdown $0.50
 //
-//        checkout.scanItem("Bread", 3);
+//        checkout.scanItem("Bread", 4);
 //        checkout.scanItem("Ground Beef", 2.50);
 //        checkout.scanItem("Pasta", 3);
 //        BigDecimal actual = checkout.getTotalPrice();
-//        assertEquals(getFormat(9), getFormat(actual));
+//        assertEquals(getFormat(16.60), getFormat(actual));
 //
 //    }
 

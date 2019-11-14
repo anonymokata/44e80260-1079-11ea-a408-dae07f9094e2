@@ -1,22 +1,29 @@
 package specialPricePacakage;
 
 import mainPackage.Item;
+import mainPackage.SpecialPrice;
 import mainPackage.formatBigDecimal;
 
 import java.math.BigDecimal;
 import java.math.RoundingMode;
 
-public class NForXDollar extends formatBigDecimal {
+public class NForXDollar extends formatBigDecimal implements SpecialPrice {
 
     private int packageQuantity;
+    private double packageWeight;
     private BigDecimal packagePrice;
-    private BigDecimal itemTotalPrice;
 
     public NForXDollar(int initialPackageDeal, BigDecimal packagePrice) {
         this.packageQuantity = initialPackageDeal;
         this.packagePrice = packagePrice;
     }
 
+    public NForXDollar(double packageWeight, BigDecimal packagePrice) {
+        this.packageWeight = packageWeight;
+        this.packagePrice = packagePrice;
+    }
+
+    @Override
     public BigDecimal calculatePrice(Item item, int quantity){
         BigDecimal tempPrice;
         int count = 0;
@@ -28,13 +35,29 @@ public class NForXDollar extends formatBigDecimal {
                     count++;
                 }
             }
-            this.itemTotalPrice = BigDecimal.valueOf(count).multiply(this.packagePrice).add(tempPrice);
+            return BigDecimal.valueOf(count).multiply(this.packagePrice).add(tempPrice);
         } else { //if not qualify for special offers
             count = quantity;
-            this.itemTotalPrice = getFormat(quantity).multiply(item.getItemPrice());
+            return getFormat(quantity).multiply(item.getItemPrice());
         }
+    }
 
-        return this.itemTotalPrice;
+    @Override
+    public BigDecimal calculatePrice(Item item, double weight) {
+        BigDecimal remainPrice;
+        double count = 0;
+        if (weight >= this.packageWeight) { // if qualify for special offers
+            double remainWeight = weight % this.packageWeight;
+            remainPrice = item.getItemPrice().multiply(getFormat(remainWeight));
+            for(double i = 0; i <= weight; i++) {
+                if (i % this.packageWeight == 0) {
+                    count++;
+                }
+            }
+            return BigDecimal.valueOf(count).multiply(this.packagePrice).add(remainPrice);
+        } else { //if not qualify for special offers
+            return getFormat(packageWeight).multiply(item.getItemPrice());
+        }
     }
 
     protected BigDecimal getFormat(int value){

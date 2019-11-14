@@ -28,6 +28,7 @@ public class CheckoutOrder extends formatBigDecimal {
 
     public Item scanItem(String name, int quantity, double weight) {
         Item item = inventory.findItem(name);
+        System.out.println("Is item exist: " + isExist(item));
         if (isExist(item)) {
             if (item.isInWeight()) {
                 getUpdatedWeight(name, item, weight);
@@ -40,10 +41,14 @@ public class CheckoutOrder extends formatBigDecimal {
     }
 
     public void storeItem(Item item, int quantity, double weight) {
+        System.out.println("Is in weight : "+ item.isInWeight());
         if (item.isInWeight()) {
             scannedItemsInWeight.put(item, weight);
+            testMethod();
+
         } else {
             scannedItemsInQuantity.put(item, quantity);
+            testMethod();
         }
     }
 
@@ -71,46 +76,41 @@ public class CheckoutOrder extends formatBigDecimal {
         }
     }
 
-    private BigDecimal getItemTotalPriceInQuantity() {
-        BigDecimal sum = getFormat(0);
-        for (Map.Entry<Item, Integer> entry : scannedItemsInQuantity.entrySet()) {
-            if (inventory.getMarkdown()) {
-                sum = sum.add(entry.getKey().getSpecialPrice().getQuantitySpecial().calculatePrice(entry.getKey(), entry.getValue()));
-            } else if (inventory.getNForXDollar()) {
-                sum = sum.add(entry.getKey().getSpecialPrice().getQuantitySpecial().calculatePrice(entry.getKey(), entry.getValue()));
-            } else if (inventory.getSpecialInQuantity()) {
-                sum = sum.add(entry.getKey().getSpecialPrice().getQuantitySpecial().calculatePrice(entry.getKey(), entry.getValue()));
-            } else if (inventory.getSpecialInWeight()) {
-                sum = sum.add(entry.getKey().getSpecialPrice().getWeightSpecial().calculatePrice(entry.getKey(), entry.getValue()));
-            }
-            sum = sum.add(entry.getKey().calculatePrice(entry.getKey(), entry.getValue()));
-
-        }
-        return sum;
-    }
-
-    private BigDecimal getItemTotalPriceInWeight() {
-        BigDecimal sum = getFormat(0);
-        for (Map.Entry<Item, Double> entry : scannedItemsInWeight.entrySet()) {
-            if (inventory.getMarkdown()) {
-                sum = sum.add(entry.getKey().getSpecialPrice().getWeightSpecial().calculatePrice(entry.getKey(), entry.getValue()));
-            } else if (inventory.getNForXDollar()) {
-                sum = sum.add(entry.getKey().getSpecialPrice().getWeightSpecial().calculatePrice(entry.getKey(), entry.getValue()));
-            } else if (inventory.getSpecialInQuantity()) {
-                sum = sum.add(entry.getKey().getSpecialPrice().getWeightSpecial().calculatePrice(entry.getKey(), entry.getValue()));
-            } else if (inventory.getSpecialInWeight()) {
-                sum = sum.add(entry.getKey().getSpecialPrice().getWeightSpecial().calculatePrice(entry.getKey(), entry.getValue()));
-            }
-            sum = sum.add(entry.getKey().calculatePrice(entry.getKey(), entry.getValue()));
-
-        }
-        return sum;
-    }
-
+    /*---------------calculate total price methods------------------*/
     public BigDecimal getTotalPrice() {
-        return getItemTotalPriceInQuantity().add(getItemTotalPriceInWeight());
+       return getItemTotalInQuantity().add(getItemTotalInWeight());
     }
 
+    private BigDecimal getItemTotalInQuantity(){
+        BigDecimal sum = new BigDecimal(0);
+        for (Map.Entry<Item, Integer> entry : scannedItemsInQuantity.entrySet()) {
+            if(entry.getKey().isSpecial()){
+                sum = sum.add(entry.getKey().getSpecialPrice().calculatePrice(entry.getKey(), entry.getValue()));
+            }else{
+                sum = sum.add(entry.getKey().calculatePrice(entry.getKey(), entry.getValue()));
+            }
+        }
+        return sum;
+    }
+
+    private BigDecimal getItemTotalInWeight(){
+        BigDecimal sum = new BigDecimal(0);
+        for (Map.Entry<Item, Double> entry : scannedItemsInWeight.entrySet()) {
+            if(entry.getKey().isSpecial()){
+                sum = sum.add(entry.getKey().getSpecialPrice().calculatePrice(entry.getKey(), entry.getValue()));
+            }else{
+                sum = sum.add(entry.getKey().calculatePrice(entry.getKey(), entry.getValue()));
+            }
+        }
+        return sum;
+    }
+//
+
+
+
+
+
+    /*-------------------------------Remove Methods-------------------------*/
     public void removeItem(String name, boolean removeItem) {
         removeItem(name, removeItem, 0);
     }
@@ -136,9 +136,8 @@ public class CheckoutOrder extends formatBigDecimal {
                     break;
                 }
             }
-        }
-        else{
-            System.out.println("Item is not found --> cannot remove items in the cart");
+        } else {
+            System.out.println("Item is not found --> cannot remove any");
         }
     }
 
@@ -152,8 +151,24 @@ public class CheckoutOrder extends formatBigDecimal {
                     scannedItemsInQuantity.put(entry.getKey(), entry.getValue() - quantity);
                 }
             }
-        }else{
-          System.out.println("Item is not found,  cannot remove items in the cart");
+        } else {
+            System.out.println("Item is not found,  cannot remove any");
+        }
+    }
+    /*----------------------------------------------------------------------------*/
+
+    private void testMethod() {
+        int count = 0;
+        System.out.println("size: "+ scannedItemsInQuantity.size());
+        System.out.println("size in Weight Map: " + scannedItemsInWeight.size());
+        for(Map.Entry<Item, Integer> testMap : scannedItemsInQuantity.entrySet()) {
+            count++;
+            System.out.println(count + ": " + testMap.getKey().toString());
+
+        }
+        for(Map.Entry<Item, Double> testMap : scannedItemsInWeight.entrySet()) {
+            count++;
+            System.out.println(count + ": " + testMap.getKey().toString());
         }
     }
 }
