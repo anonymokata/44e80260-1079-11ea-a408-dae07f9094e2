@@ -28,23 +28,6 @@ public class Item extends formatBigDecimal {
         this.isWeight = isWeight;
         this.itemPrice = itemPrice;
     }
-//    //for quantity
-//    public Item(String itemName, int itemQuantity, BigDecimal itemPrice, SpecialPrice specialPrice) {
-//        this.itemName = itemName;
-//        this.itemQuantity = itemQuantity;
-//        this.itemPrice = itemPrice;
-//        this.specialPrice = specialPrice;
-//    }
-
-//    //for weight
-//    public Item(String itemName, double itemWeight, BigDecimal itemPrice, SpecialPrice specialPrice) {
-//        this.itemName = itemName;
-//        this.itemWeight = itemWeight;
-//        this.itemPrice = itemPrice;
-//        this.specialPrice = specialPrice;
-//    }
-
-
     //get price without any special -> in quantity
     public BigDecimal calculatePrice(Item item, int quantity) {
         return getFormat(quantity).multiply(item.getItemPrice());
@@ -74,6 +57,7 @@ public class Item extends formatBigDecimal {
         return isWeight;
     }
 
+    //for debug
     @Override
     public String toString() {
         return "Item{" +
