@@ -138,7 +138,7 @@ public class CheckoutOrder extends formatBigDecimal {
             }
         }
         else{
-            System.out.println("Item is not found.");
+            System.out.println("Item is not found --> cannot remove items in the cart");
         }
     }
 
@@ -153,7 +153,7 @@ public class CheckoutOrder extends formatBigDecimal {
                 }
             }
         }else{
-        System.out.println("Item is not found");
+          System.out.println("Item is not found,  cannot remove items in the cart");
         }
     }
 }

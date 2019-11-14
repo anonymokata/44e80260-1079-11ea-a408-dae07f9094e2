@@ -44,22 +44,27 @@ public class CheckoutOrderTest extends formatBigDecimal {
         BigDecimal actual3 = checkout.getTotalPrice();
         assertEquals(getFormat(7.11), getFormat(actual3));
 
-        checkout.removeItem("Bread", true); //remove all bread
+        checkout.removeItem("Ice Cream", false); //remove item that is not in the cart
         BigDecimal actual4 = checkout.getTotalPrice();
-        assertEquals(getFormat(3.13), getFormat(actual4));
+        assertEquals(getFormat(7.11), getFormat(actual4));
+
+        checkout.removeItem("Bread", true); //remove all bread
+        BigDecimal actual5 = checkout.getTotalPrice();
+        assertEquals(getFormat(3.13), getFormat(actual5));
+
+       
 
     }
 
 //    @Test
 //    public void scanningAnMarkdownItemReturnTheItemTotalPrice() { // markdown price
+//        inventory.setMarkdown("Pasta", getFormat(0.50), true); // markdown $0.50
 //
-//        String name = "Pasta";
-//        int quantity = 4;
-//        inventory.setMarkdown(name, getFormat(0.50), true); // markdown $0.50
-//
-//      checkout.scanItem(name);
+//        checkout.scanItem("Bread", 3);
+//        checkout.scanItem("Ground Beef", 2.50);
+//        checkout.scanItem("Pasta", 3);
 //        BigDecimal actual = checkout.getTotalPrice();
-//        assertEquals(getFormat(10), getFormat(actual));
+//        assertEquals(getFormat(9), getFormat(actual));
 //
 //    }
 
