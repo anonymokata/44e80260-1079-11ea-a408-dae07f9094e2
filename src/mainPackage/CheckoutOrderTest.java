@@ -102,10 +102,10 @@ public class CheckoutOrderTest extends formatBigDecimal {
         BigDecimal actual4 = checkout.getTotalPrice();
         assertEquals(getFormat(14), getFormat(actual4));
 
-//        String name3 = "Apple";
-//        checkout.scanItem(name3, 5.00); // scan more item to test the updated total price
-//        BigDecimal actual5 = checkout.getTotalPrice();
-//        assertEquals(getFormat(8.45), getFormat(actual5));
+        String name3 = "Apple";
+        checkout.scanItem(name3, 5.00); // scan more item to test the updated total price
+        BigDecimal actual5 = checkout.getTotalPrice();
+        assertEquals(getFormat(17.45), getFormat(actual5));
 
     }
 
