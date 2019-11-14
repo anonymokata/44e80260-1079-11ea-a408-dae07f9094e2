@@ -59,6 +59,6 @@ public class Item extends formatBigDecimal {
     //for debug
     @Override
     public String toString() {
-        return "<Name:"+itemName + "              weighted:" + isWeight +"       $" + itemPrice +">";
+        return "   <Name:"+itemName + "              weighted:" + isWeight +"       $" + itemPrice +">";
     }
 }

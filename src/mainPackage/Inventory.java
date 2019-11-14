@@ -28,37 +28,53 @@ public class Inventory {
         }
     }
 
+    //markdown
     public void setMarkdown(String name, BigDecimal markdownPrice, boolean isSpecial){
         Item item = findItem(name);
         item.setSpecial(isSpecial);
         item.setSpecialPrice(new Markdown(markdownPrice));
     }
 
-    public void setNForXDollarSpecial(String name, int packageQuantity, BigDecimal packagePrice){
+    //NForXDollar: quantity params
+    public void setNForXDollarSpecial(String name, int packageQuantity, BigDecimal packagePrice, boolean isSpecial){
         Item item = findItem(name);
+        item.setSpecial(isSpecial);
         item.setSpecialPrice(new NForXDollar(packageQuantity, packagePrice));
-
     }
 
-    public void setBuyNGetMAtAPercentageInQuantity(String name, int initialQuantity, int freeQuantity){ //in quantity
-        setBuyNGetMAtAPercentageInQuantity(name, initialQuantity, freeQuantity, null, null);
+    //NForXDollar: weight params
+    public void setNForXDollarSpecial(String name, double packageWeight, BigDecimal packagePrice){
+        Item item = findItem(name);
+        item.setSpecialPrice(new NForXDollar(packageWeight, packagePrice));
     }
 
-    public void setBuyNGetMAtAPercentageInQuantity(String name, int initialQuantity, int freeQuantity, Double discountPercentage){
-        setBuyNGetMAtAPercentageInQuantity(name, initialQuantity, freeQuantity, discountPercentage, null);
+
+    //BuyNGetMAtAPercentage: quantity params
+    public void setBuyNGetMAtAPercentage(String name, int initialQuantity, int freeQuantity){ //in quantity
+        setBuyNGetMAtAPercentage(name, initialQuantity, freeQuantity, null);
     }
 
-    public void setBuyNGetMAtAPercentageInQuantity(String name, int initialQuantity, int freeQuantity, Double discountPercentage, Integer limit){
+    public void setBuyNGetMAtAPercentage(String name, int initialQuantity, int freeQuantity, Double discountPercentage){
+        setBuyNGetMAtAPercentage(name, initialQuantity, freeQuantity, discountPercentage, null);
+    }
+
+    public void setBuyNGetMAtAPercentage(String name, int initialQuantity, int freeQuantity, Double discountPercentage, Integer limit){
         Item item = findItem(name);
         item.setSpecialPrice(new BuyNGetMAtAPercentage(initialQuantity, freeQuantity, discountPercentage, limit));
     }
 
-//    public void setBuyNGetMAtAPercentageInWeight(String name, double initialWeight, double freeWeight, Boolean isSpecialInWeight){ //in weight
-//        setBuyNGetMAtAPercentageInWeight(name, initialWeight, freeWeight, null, isSpecialInWeight);
-//    }
-//
-//    public void setBuyNGetMAtAPercentageInWeight(String name, double initialWeight, double freeWeight, Double discountPercentage, Boolean isSpecialInWeight){
-//        Item item = findItem(name);
-//        item.setSpecialPrice(new BuyNGetMAtAPercentageInWeight(initialWeight, freeWeight, discountPercentage, isSpecialInWeight));
-//    }
+    //uyNGetMAtAPercentage: weight params
+    public void setBuyNGetMAtAPercentage(String name, double initialWeight, double freeWeight){ //in quantity
+        setBuyNGetMAtAPercentage(name, initialWeight, freeWeight, null);
+    }
+
+    public void setBuyNGetMAtAPercentage(String name,double initialWeight, double freeWeight, Double discountPercentage){
+        setBuyNGetMAtAPercentage(name, initialWeight, freeWeight, discountPercentage, null);
+    }
+
+    public void setBuyNGetMAtAPercentage(String name, double initialWeight, double freeWeight,Double discountPercentage, Integer limit){
+        Item item = findItem(name);
+        item.setSpecialPrice(new BuyNGetMAtAPercentage(initialWeight, freeWeight, discountPercentage, limit));
+    }
+
 }

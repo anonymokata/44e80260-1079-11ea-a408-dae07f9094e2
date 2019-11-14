@@ -64,15 +64,19 @@ public class CheckoutOrderTest extends formatBigDecimal {
         assertEquals(getFormat(4.49), getFormat(actualX));
     }
 
-//    @Test
-//    public void scanningAnPackageDealReturnTheItemTotalPrice() { // package deal -> N for $M
-//        String name = "Bacon";
-//
-//        inventory.setNForXDollarSpecial(name, 3, getFormat(7), true);// special --> 3 for $5
-//        Item scannedItem = checkout.scanItem(name);
-//        BigDecimal actual = getSpecialPrice(name).getnForXDollar().calculatePrice(scannedItem, 3);
-//        assertEquals(getFormat(7), getFormat(actual));
-//    }
+    @Test
+    public void scanningAnPackageDealReturnTheItemTotalPrice() { // package deal -> N for $M
+        inventory.setNForXDollarSpecial("Avocado", 4, getFormat(3.00), true); // 4 for $3
+
+        checkout.scanItem("Avocado", 5);
+        BigDecimal actual = checkout.getTotalPrice();
+        assertEquals(getFormat(4), getFormat(actual));
+
+        checkout.scanItem("Bread", 1); //test total price of all scanned items with N for $N item in it
+        BigDecimal actualX = checkout.getTotalPrice();
+        assertEquals(getFormat(5.99), getFormat(actualX));
+
+    }
 
 //    @Test
 //    public void specialOfferInQuantityReturnsTheItemTotalPrice() { // Buy N for M at X% off, with or without limitation
