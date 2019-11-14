@@ -11,7 +11,7 @@ public class InventoryTest extends formatBigDecimal{
     @Test
     public void storeAnItemReturnTheItemFromInventory(){
 
-        Item item = new Item("Bread", 10, getFormat(2));
+        Item item = new Item("Bread", 10, false, getFormat(2));
         Inventory inventory = new Inventory();
         inventory.storeItems(item);
         assertTrue(inventory.getItemHashMap().containsKey("Bread"));

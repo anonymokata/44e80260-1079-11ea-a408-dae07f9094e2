@@ -7,43 +7,42 @@ import java.math.BigDecimal;
 public class Item extends formatBigDecimal {
     private String itemName;
     private int itemQuantity;
-    private double itemWeight;
+    private boolean isWeight;
     private BigDecimal itemPrice;
     private SpecialPrice specialPrice;
+//    private double itemWeight;
 
     public Item(SpecialPrice specialPrice) {
         this.specialPrice = specialPrice;
     }
 
-    public Item(String itemName, int itemQuantity, BigDecimal itemPrice) {
+    public Item(String itemName, int itemQuantity, boolean isWeight, BigDecimal itemPrice) {
         this.itemName = itemName;
         this.itemQuantity = itemQuantity;
+        this.isWeight = isWeight;
         this.itemPrice = itemPrice;
-        this.specialPrice = null;
     }
 
-    public Item(String itemName, double itemWeight, BigDecimal itemPrice) {
+    public Item(String itemName, boolean isWeight, BigDecimal itemPrice) {
         this.itemName = itemName;
-        this.itemWeight = itemWeight;
+        this.isWeight = isWeight;
         this.itemPrice = itemPrice;
-        this.specialPrice = null;
     }
+//    //for quantity
+//    public Item(String itemName, int itemQuantity, BigDecimal itemPrice, SpecialPrice specialPrice) {
+//        this.itemName = itemName;
+//        this.itemQuantity = itemQuantity;
+//        this.itemPrice = itemPrice;
+//        this.specialPrice = specialPrice;
+//    }
 
-    //for quantity
-    public Item(String itemName, int itemQuantity, BigDecimal itemPrice, SpecialPrice specialPrice) {
-        this.itemName = itemName;
-        this.itemQuantity = itemQuantity;
-        this.itemPrice = itemPrice;
-        this.specialPrice = specialPrice;
-    }
-
-    //for weight
-    public Item(String itemName, double itemWeight, BigDecimal itemPrice, SpecialPrice specialPrice) {
-        this.itemName = itemName;
-        this.itemWeight = itemWeight;
-        this.itemPrice = itemPrice;
-        this.specialPrice = specialPrice;
-    }
+//    //for weight
+//    public Item(String itemName, double itemWeight, BigDecimal itemPrice, SpecialPrice specialPrice) {
+//        this.itemName = itemName;
+//        this.itemWeight = itemWeight;
+//        this.itemPrice = itemPrice;
+//        this.specialPrice = specialPrice;
+//    }
 
 
     //get price without any special -> in quantity
@@ -69,5 +68,19 @@ public class Item extends formatBigDecimal {
 
     public void setSpecialPrice(SpecialPrice specialPrice) {
         this.specialPrice = specialPrice;
+    }
+
+    public boolean isInWeight() {
+        return isWeight;
+    }
+
+    @Override
+    public String toString() {
+        return "Item{" +
+                "itemName='" + itemName + '\'' +
+                ", itemQuantity=" + itemQuantity +
+                ", isWeight=" + isWeight +
+                ", itemPrice=" + itemPrice +
+                '}';
     }
 }
