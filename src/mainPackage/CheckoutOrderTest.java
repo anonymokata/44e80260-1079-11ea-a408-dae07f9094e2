@@ -30,42 +30,39 @@ public class CheckoutOrderTest extends formatBigDecimal {
     }
 
     @Test
-    public void scanAnExistedItemReturnsTheUpdatedTotalPrice() { // regular price(without any special offer)
-        inventory.setMarkdown("Ground Beef", getFormat(0.50), true); // markdown $0.50
-
+    public void scanItemReturnsTheUpdatedTotalPrice() { // regular price(without any special offer)
         checkout.scanItem("Bread", 3); //test result in quantity
         checkout.scanItem("Ground Beef", 2.00);
 
         BigDecimal actual1 = checkout.getTotalPrice();
-        assertEquals(getFormat(7.97), getFormat(actual1));
+        assertEquals(getFormat(8.97), getFormat(actual1));
 
-        checkout.removeItem("Bread", 1);//remove 1 bag of bread
-        BigDecimal actual3 = checkout.getTotalPrice();
-        assertEquals(getFormat(5.98), getFormat(actual3));
+//        checkout.removeItem("Bread", 1);//remove 1 bag of bread
+//        BigDecimal actual3 = checkout.getTotalPrice();
+//        assertEquals(getFormat(6.98), getFormat(actual3));
+//
+//        checkout.removeItem("Ice Cream", false); //remove item that is not in the cart
+//        BigDecimal actual4 = checkout.getTotalPrice();
+//        assertEquals(getFormat(6.98, getFormat(actual4));
 
-        checkout.removeItem("Ice Cream", false); //remove item that is not in the cart
-        BigDecimal actual4 = checkout.getTotalPrice();
-        assertEquals(getFormat(5.98), getFormat(actual4));
-
-        checkout.removeItem("Bread", true); //remove all bread
-        BigDecimal actual5 = checkout.getTotalPrice();
-        assertEquals(getFormat(2.00), getFormat(actual5));
-
-
+//        checkout.removeItem("Bread", true); //remove all bread
+//        BigDecimal actual5 = checkout.getTotalPrice();
+//        assertEquals(getFormat(2.00), getFormat(actual5));
 
     }
 
-//    @Test
-//    public void scanningAnMarkdownItemReturnTheItemTotalPrice() { // markdown price
-//        inventory.setMarkdown("Ground Beef", getFormat(0.50), true); // markdown $0.50
-//
-//        checkout.scanItem("Bread", 4);
-//        checkout.scanItem("Ground Beef", 2.50);
-//        checkout.scanItem("Pasta", 3);
-//        BigDecimal actual = checkout.getTotalPrice();
-//        assertEquals(getFormat(16.60), getFormat(actual));
-//
-//    }
+    @Test
+    public void scanMarkdownItemReturnTheUpdatedTotalPrice() { // markdown price
+        inventory.setMarkdown("Ground Beef", getFormat(0.50), true); // markdown $0.50
+
+        checkout.scanItem("Ground Beef", 2.50); //test single markdown price total
+        BigDecimal actual = checkout.getTotalPrice();
+        assertEquals(getFormat(2.50), getFormat(actual));
+
+        checkout.scanItem("Bread", 1); //test total price of all scanned items with markdown item in it
+        BigDecimal actualX = checkout.getTotalPrice();
+        assertEquals(getFormat(4.49), getFormat(actualX));
+    }
 
 //    @Test
 //    public void scanningAnPackageDealReturnTheItemTotalPrice() { // package deal -> N for $M
@@ -76,7 +73,7 @@ public class CheckoutOrderTest extends formatBigDecimal {
 //        BigDecimal actual = getSpecialPrice(name).getnForXDollar().calculatePrice(scannedItem, 3);
 //        assertEquals(getFormat(7), getFormat(actual));
 //    }
-//
+
 //    @Test
 //    public void specialOfferInQuantityReturnsTheItemTotalPrice() { // Buy N for M at X% off, with or without limitation
 //        String name = "Avocado";
