@@ -10,37 +10,47 @@ public class CheckoutOrder extends formatBigDecimal {
     Map<Item, Integer> scannedItemsInQuantity = new HashMap<>();
     Map<Item, Double> scannedItemsInWeight = new HashMap<>();
 
-//    Map<String, BigDecimal> scannedItemPriceMap = new HashMap<>();
-
-
     public CheckoutOrder(Inventory inventory) {
         this.inventory = inventory;
     }
 
-    public Item scanItem(String name) {
+    public void scanItem(String name){
+        scanItem(name, 1, 0);
+    }
+
+    public void scanItem(String name, int quantity){
+        scanItem(name, quantity, 0);
+    }
+    public void scanItem(String name, double weight){
+        scanItem(name, 0, weight);
+    }
+    public Item scanItem(String name, int quantity, double weight) {
         Item item = inventory.findItem(name);
         if (isExist(item)) {
             if (item.isInWeight()) {
-                getUpdatedWeight(name, item);
+                getUpdatedWeight(name, item, weight);
             }
-            getUpdatedQuantity(name, item);
+            getUpdatedQuantity(name, item, quantity);
         } else {
-           storeItem(item);
+           storeItem(item, quantity, weight);
         }
         return item;
     }
 
-    public void storeItem(Item item){
+    public void storeItem(Item item, int quantity, double weight){
         if(item.isInWeight()){
-            scannedItemsInWeight.put(item, getWeight());
+            scannedItemsInWeight.put(item, weight);
         }else{
-            scannedItemsInQuantity.put(item, 1);
+            scannedItemsInQuantity.put(item, quantity);
         }
     }
 
-    private void getUpdatedQuantity(String name, Item item) {
+    private void getUpdatedQuantity(String name, Item item, int quantity) {
         Integer count = scannedItemsInQuantity.get(name);
-        scannedItemsInQuantity.put(item, count++);
+        if(count == null){
+            scannedItemsInQuantity.put(item, quantity);
+        }
+        scannedItemsInQuantity.put(item, count + quantity);
     }
 
     public boolean isExist(Item item) {
@@ -50,22 +60,13 @@ public class CheckoutOrder extends formatBigDecimal {
         return false;
     }
 
-    private void getUpdatedWeight(String name, Item item) {
+    private void getUpdatedWeight(String name, Item item, double weight) {
         Double count = scannedItemsInWeight.get(name);
-        double weight = getWeight();
         if (count == null) {
             scannedItemsInWeight.put(item, weight);
         } else {
             scannedItemsInWeight.put(item, count + weight);
         }
-    }
-
-    private double getWeight() {
-        Scanner scan = new Scanner(System.in);
-        System.out.println("Please weight your item: ");
-        double weight = scan.nextDouble();
-        System.out.println("Your item weight " + weight);
-        return weight;
     }
 
     public BigDecimal getItemTotalPriceInQuantity() {
@@ -99,6 +100,7 @@ public class CheckoutOrder extends formatBigDecimal {
                 sum = sum.add(entry.getKey().getSpecialPrice().getWeightSpecial().calculatePrice(entry.getKey(), entry.getValue()));
             }
             sum = sum.add(entry.getKey().calculatePrice(entry.getKey(), entry.getValue()));
+
         }
         return sum;
     }
