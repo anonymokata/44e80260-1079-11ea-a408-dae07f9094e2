@@ -15,7 +15,11 @@ public class BuyNGetMAtAPercentageInQuantity extends formatBigDecimal {
     public BuyNGetMAtAPercentageInQuantity(int initialQuantity, int freeQuantity, Double discountPercentage, Integer limitByQuantity) {
         this.initialQuantity = initialQuantity;
         this.freeQuantity = freeQuantity;
-        this.discountPercentage = discountPercentage;
+        if (discountPercentage == null) {
+            this.discountPercentage = 100.00; // the free item is 100% for free
+        } else {
+            this.discountPercentage = discountPercentage;
+        }
         this.limitByQuantity = limitByQuantity;
     }
 
@@ -24,7 +28,7 @@ public class BuyNGetMAtAPercentageInQuantity extends formatBigDecimal {
         int specialCounter = 0;
         int tempQuantity = 0;
         if (initialQuantity + freeQuantity > quantity) { //if not qualify for special offers
-           return item.getItemPrice().multiply(getFormat(quantity));
+            return item.getItemPrice().multiply(getFormat(quantity));
 
         } else {    //if qualify for special offers
             if (this.limitByQuantity == null) { //without special offer limitation
@@ -37,7 +41,7 @@ public class BuyNGetMAtAPercentageInQuantity extends formatBigDecimal {
                 specialCounter = getSpecialCounter(tempQuantity, specialCounter);
                 counter = quantity - specialCounter;
 
-              return getItemTotalPrice(item, counter, specialCounter);
+                return getItemTotalPrice(item, counter, specialCounter);
             }
 
         }

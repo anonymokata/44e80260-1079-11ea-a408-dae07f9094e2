@@ -23,10 +23,10 @@ public class SpecialPrice {
     public SpecialPrice(BuyNGetMAtAPercentageInWeight weightSpecial) {
         this.weightSpecial = weightSpecial;
     }
-
-    public void getPrice(){
-
-    }
+//
+//    public void getPrice(){
+//
+//    }
 
     public Markdown getMarkdown() {
         return markdown;
@@ -36,21 +36,21 @@ public class SpecialPrice {
         return nForXDollar;
     }
 
-    public void setMarkdown(Markdown markdown) {
-        this.markdown = markdown;
-    }
+//    public void setMarkdown(Markdown markdown) {
+//        this.markdown = markdown;
+//    }
+//
+//    public void setnForXDollar(NForXDollar nForXDollar) {
+//        this.nForXDollar = nForXDollar;
+//    }
 
-    public void setnForXDollar(NForXDollar nForXDollar) {
-        this.nForXDollar = nForXDollar;
-    }
-
-    public void setQuantitySpecial(BuyNGetMAtAPercentageInQuantity quantitySpecial) {
-        this.quantitySpecial = quantitySpecial;
-    }
-
-    public void setWeightSpecial(BuyNGetMAtAPercentageInWeight weightSpecial) {
-        this.weightSpecial = weightSpecial;
-    }
+//    public void setQuantitySpecial(BuyNGetMAtAPercentageInQuantity quantitySpecial) {
+//        this.quantitySpecial = quantitySpecial;
+//    }
+//
+//    public void setWeightSpecial(BuyNGetMAtAPercentageInWeight weightSpecial) {
+//        this.weightSpecial = weightSpecial;
+//    }
 
     public BuyNGetMAtAPercentageInQuantity getQuantitySpecial() {
         return quantitySpecial;

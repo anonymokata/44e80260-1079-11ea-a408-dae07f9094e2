@@ -7,13 +7,17 @@ import java.math.BigDecimal;
 public class BuyNGetMAtAPercentageInWeight extends formatBigDecimal {
     private double initialWeight;
     private double freeWeight;
-    private double discountPercentage;
+    private Double discountPercentage;
 
 
-    public BuyNGetMAtAPercentageInWeight(double initialWeight, double freeWeight, double discountPercentage) {
+    public BuyNGetMAtAPercentageInWeight(double initialWeight, double freeWeight, Double discountPercentage) {
         this.initialWeight = initialWeight;
         this.freeWeight = freeWeight;
-        this.discountPercentage = discountPercentage;
+        if(discountPercentage == null){
+            this.discountPercentage = 100.00; // 100% for free
+        }else {
+            this.discountPercentage = discountPercentage;
+        }
     }
 
     public BigDecimal calculatePrice(Item item, double weight){
