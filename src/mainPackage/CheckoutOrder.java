@@ -124,6 +124,9 @@ public class CheckoutOrder extends formatBigDecimal {
         }
     }
 
+//    private void updateItemFromMapAfterRemoving(){
+//
+//    }
     private void removeItemAll(Item item) {
         if (scannedItemsInQuantity.containsKey(item)) {
             for (Map.Entry<Item, Integer> entry : scannedItemsInQuantity.entrySet()) {

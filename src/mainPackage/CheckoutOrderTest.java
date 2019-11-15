@@ -124,22 +124,20 @@ public class CheckoutOrderTest extends formatBigDecimal {
         checkout.scanItem("Organic Chicken", 5.15);
         checkout.scanItem("Small Green Onion", 2);
 
-
-        BigDecimal actualCheckoutTotal = checkout.getTotalPrice();
         checkout.testMethod();
-        assertEquals(getFormat(61.67), getFormat(actualCheckoutTotal));
+        assertEquals(getFormat(61.67), getFormat(checkout.getTotalPrice()));
 
-//        checkout.removeItem("Bread", 1);//remove 1 bag of bread
-//        BigDecimal actual3 = checkout.getTotalPrice();
-//        assertEquals(getFormat(6.98), getFormat(actual3));
+        checkout.removeItem("Bread", 1);//remove 1 bag of bread
+        assertEquals(getFormat(59.68), getFormat(checkout.getTotalPrice()));
 
-//        checkout.removeItem("Ice Cream", false); //remove item that is not in the cart
-//        BigDecimal actual4 = checkout.getTotalPrice();
-//        assertEquals(getFormat(6.98), getFormat(actual4));
-//
-//        checkout.removeItem("Bread", true); //remove all bread
-//        BigDecimal actual5 = checkout.getTotalPrice();
-//        assertEquals(getFormat(2.00), getFormat(actual5));
+        checkout.removeItem("Ice Cream", false); //remove item that is not in the cart
+        assertEquals(getFormat(59.68), getFormat(checkout.getTotalPrice()));
+
+        checkout.removeItem("Bread", true); //remove all bread
+        assertEquals(getFormat(55.7), getFormat(checkout.getTotalPrice()));
+
+        checkout.removeItem("Small Green Onion", 2); // remove 2, which results not qualify any special offer
+        assertEquals(getFormat(54.67), getFormat(checkout.getTotalPrice()));
     }
 
 }
