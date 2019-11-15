@@ -1,13 +1,11 @@
 package specialPricePacakage;
 
+import mainPackage.FormatBigDecimal;
 import mainPackage.Item;
 import mainPackage.SpecialPrice;
-import mainPackage.formatBigDecimal;
-
 import java.math.BigDecimal;
-import java.math.RoundingMode;
 
-public class NForXDollar extends formatBigDecimal implements SpecialPrice {
+public class NForXDollar extends FormatBigDecimal implements SpecialPrice {
 
     private int packageQuantity;
     private double packageWeight;
@@ -70,7 +68,7 @@ public class NForXDollar extends formatBigDecimal implements SpecialPrice {
             } else {
                 double remainWeight = weight - (double) limitWeight;
                 remainPrice = item.getItemPrice().multiply(getFormat(remainWeight));
-                count = (weight - remainWeight)/packageWeight;
+                count = (weight - remainWeight) / packageWeight;
                 return remainPrice.add(getFormat(count).multiply(packagePrice));
             }
 
@@ -86,10 +84,6 @@ public class NForXDollar extends formatBigDecimal implements SpecialPrice {
             }
         }
         return count;
-    }
 
-    protected BigDecimal getFormat(int value) {
-        return BigDecimal.valueOf(value).setScale(0, RoundingMode.HALF_UP);
     }
-
 }

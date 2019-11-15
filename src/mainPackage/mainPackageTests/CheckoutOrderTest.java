@@ -1,13 +1,17 @@
-package mainPackage;
+package mainPackage.mainPackageTests;
 
+import mainPackage.CheckoutOrder;
+import mainPackage.FormatBigDecimal;
+import mainPackage.Inventory;
+import mainPackage.Item;
 import org.junit.Before;
 import org.junit.Test;
 
 import java.math.BigDecimal;
 
-import static org.junit.Assert.*;
+import static junit.framework.TestCase.assertEquals;
 
-public class CheckoutOrderTest extends formatBigDecimal {
+public class CheckoutOrderTest extends FormatBigDecimal {
     private Inventory inventory;
     private CheckoutOrder checkout;
 

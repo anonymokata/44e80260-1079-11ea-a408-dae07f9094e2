@@ -3,7 +3,7 @@ package mainPackage;
 import java.math.BigDecimal;
 import java.math.RoundingMode;
 
-public class formatBigDecimal {
+public class FormatBigDecimal {
 
     protected BigDecimal getFormat(int value){
         return BigDecimal.valueOf(value).setScale(2, RoundingMode.HALF_UP);

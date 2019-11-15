@@ -1,16 +1,15 @@
-package specialPricePacakage;
+package specialPricePackageTests;
 
 import mainPackage.Inventory;
 import mainPackage.Item;
-import mainPackage.formatBigDecimal;
+import mainPackage.FormatBigDecimal;
 import org.junit.Before;
 import org.junit.Test;
-
-import java.math.BigDecimal;
+import specialPricePacakage.NForXDollar;
 
 import static org.junit.Assert.*;
 
-public class NForXDollarTest extends formatBigDecimal {
+public class NForXDollarTest extends FormatBigDecimal {
     private Inventory inventory;
     private NForXDollar NFXD;
 

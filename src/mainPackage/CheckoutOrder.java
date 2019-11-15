@@ -3,7 +3,7 @@ package mainPackage;
 import java.math.BigDecimal;
 import java.util.*;
 
-public class CheckoutOrder extends formatBigDecimal {
+public class CheckoutOrder extends FormatBigDecimal {
 
     private Inventory inventory;
 
@@ -55,13 +55,6 @@ public class CheckoutOrder extends formatBigDecimal {
         scannedItemsInQuantity.replace(item, count + quantity);
     }
 
-    public boolean isExist(Item item) {
-        if (scannedItemsInQuantity.containsKey(item)) {
-            return true;
-        }
-        return false;
-    }
-
     private void getUpdatedWeight(Item item, double weight) {
         Double count = scannedItemsInWeight.get(item);
         if (count == null) {
@@ -71,6 +64,12 @@ public class CheckoutOrder extends formatBigDecimal {
         }
     }
 
+    public boolean isExist(Item item) {
+        if (scannedItemsInQuantity.containsKey(item)) {
+            return true;
+        }
+        return false;
+    }
     /*---------------calculate total price methods------------------*/
     public BigDecimal getTotalPrice() {
         return getItemTotalInQuantity().add(getItemTotalInWeight());

@@ -2,12 +2,12 @@ package specialPricePacakage;
 
 import mainPackage.Item;
 import mainPackage.SpecialPrice;
-import mainPackage.formatBigDecimal;
+import mainPackage.FormatBigDecimal;
 
 import java.math.BigDecimal;
 
 
-public class BuyNGetMAtAPercentage extends formatBigDecimal implements SpecialPrice {
+public class BuyNGetMAtAPercentage extends FormatBigDecimal implements SpecialPrice {
     private int initialQuantity;
     private int freeQuantity;
     private double initialWeight;

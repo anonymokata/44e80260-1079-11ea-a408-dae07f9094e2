@@ -1,14 +1,15 @@
-package specialPricePacakage;
+package specialPricePackageTests;
 
 import mainPackage.Inventory;
 import mainPackage.Item;
-import mainPackage.formatBigDecimal;
+import mainPackage.FormatBigDecimal;
 import org.junit.Before;
 import org.junit.Test;
+import specialPricePacakage.Markdown;
 
 import static org.junit.Assert.*;
 
-public class MarkdownTest extends formatBigDecimal {
+public class MarkdownTest extends FormatBigDecimal {
     private Inventory inventory;
     private Markdown m;
 

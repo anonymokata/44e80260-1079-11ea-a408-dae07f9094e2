@@ -2,11 +2,11 @@ package specialPricePacakage;
 
 import mainPackage.Item;
 import mainPackage.SpecialPrice;
-import mainPackage.formatBigDecimal;
+import mainPackage.FormatBigDecimal;
 import java.math.BigDecimal;
 
 
-public class Markdown extends formatBigDecimal implements SpecialPrice {
+public class Markdown extends FormatBigDecimal implements SpecialPrice {
     private BigDecimal markdownPrice;
 
 

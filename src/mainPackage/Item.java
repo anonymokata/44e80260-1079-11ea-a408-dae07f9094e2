@@ -2,7 +2,7 @@ package mainPackage;
 
 import java.math.BigDecimal;
 
-public class Item extends formatBigDecimal {
+public class Item extends FormatBigDecimal {
     private String itemName;
     private boolean isWeight;
     private BigDecimal itemPrice;
@@ -60,3 +60,4 @@ public class Item extends formatBigDecimal {
         return "   <Name:"+itemName + "     weighted:" + isWeight +"   $" + itemPrice + ">";
     }
 }
+

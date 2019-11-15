@@ -1,9 +1,12 @@
-package mainPackage;
+package mainPackage.mainPackageTests;
 
+import mainPackage.FormatBigDecimal;
+import mainPackage.Inventory;
+import mainPackage.Item;
 import org.junit.Test;
 import static org.junit.Assert.*;
 
-public class InventoryTest extends formatBigDecimal{
+public class InventoryTest extends FormatBigDecimal {
     @Test
     public void storeAnItemReturnTheItemFromInventory(){
 
