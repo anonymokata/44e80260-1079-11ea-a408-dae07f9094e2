@@ -1,4 +1,4 @@
-package specialPricePackageTests;
+package specialPricePacakage.specialPricePackageTests;
 
 import mainPackage.Inventory;
 import mainPackage.Item;
