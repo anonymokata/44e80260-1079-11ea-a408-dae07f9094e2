@@ -1,5 +1,7 @@
 package mainPackage;
 
+import jdk.swing.interop.SwingInterOpUtils;
+
 import java.math.BigDecimal;
 import java.util.*;
 
@@ -42,11 +44,8 @@ public class CheckoutOrder extends formatBigDecimal {
     public void storeItem(Item item, int quantity, double weight) {
         if (item.isInWeight()) {
             scannedItemsInWeight.put(item, weight);
-            testMethod();
-
         } else {
             scannedItemsInQuantity.put(item, quantity);
-            testMethod();
         }
     }
 
@@ -59,7 +58,7 @@ public class CheckoutOrder extends formatBigDecimal {
     }
 
     public boolean isExist(Item item) {
-        if (scannedItemsInQuantity.containsKey(item.getItemName())) {
+        if (scannedItemsInQuantity.containsKey(item)) {
             return true;
         }
         return false;
@@ -154,12 +153,12 @@ public class CheckoutOrder extends formatBigDecimal {
     }
     /*----------------------------------------------------------------------------*/
 
-    private void testMethod() {
+   public void testMethod() {
         int count = 0;
         for(Map.Entry<Item, Integer> testMap : scannedItemsInQuantity.entrySet()) {
             count++;
-//            System.out.print(count + ": " + testMap.getKey().toString());
-//            System.out.println("         quantity: "+ testMap.getValue());
+            System.out.print(count + ": " + testMap.getKey().toString());
+            System.out.println("         quantity: "+ testMap.getValue());
 
         }
         for(Map.Entry<Item, Double> testMap : scannedItemsInWeight.entrySet()) {

@@ -14,6 +14,7 @@ public class BuyNGetMAtAPercentage extends formatBigDecimal implements SpecialPr
     private double freeWeight;
     private Double discountPercentage;
     private Integer limitByQuantity;
+    private Double limitByWeight;
 
     public BuyNGetMAtAPercentage(int initialQuantity, int freeQuantity, Double discountPercentage, Integer limitByQuantity) {
         this.initialQuantity = initialQuantity;
@@ -26,11 +27,11 @@ public class BuyNGetMAtAPercentage extends formatBigDecimal implements SpecialPr
         this.limitByQuantity = limitByQuantity;
     }
 
-    public BuyNGetMAtAPercentage(double initialWeight, double freeWeight, Double discountPercentage, Integer limitByQuantity) {
+    public BuyNGetMAtAPercentage(double initialWeight, double freeWeight, Double discountPercentage, Double limitByWeight) {
         this.initialWeight = initialWeight;
         this.freeWeight = freeWeight;
         this.discountPercentage = discountPercentage;
-        this.limitByQuantity = limitByQuantity;
+        this.limitByWeight = limitByWeight;
     }
 
     /*---------------------calculate price in quantity methods--------------------------*/
@@ -84,17 +85,25 @@ public class BuyNGetMAtAPercentage extends formatBigDecimal implements SpecialPr
     public BigDecimal calculatePrice(Item item, double weight){
         double weightCount = 0;
         double specialWeightCount = 0;
-        double tempWeight;
+        double remainWeight;
+        BigDecimal remainPrice;
 
         if ((this.initialWeight + this.freeWeight > weight)) { // if not qualify for free offers
             return getFormat(weight).multiply(item.getItemPrice());
         } else {   // if qualify for free offers
-            tempWeight = weight;
-            specialWeightCount = getSpecialCounter(tempWeight, specialWeightCount);
-            weightCount = weight - specialWeightCount;
+            if(limitByWeight == null) {
+                remainWeight = weight;
+                specialWeightCount = getSpecialCounter(remainWeight, specialWeightCount);
+                weightCount = weight - specialWeightCount;
 
-            return getItemTotalPrice(item, weightCount, specialWeightCount);
-
+                return getItemTotalPrice(item, weightCount, specialWeightCount);
+            }else{
+                remainWeight = weight - limitByWeight;
+                remainPrice = item.getItemPrice().multiply(getFormat(remainWeight));
+                specialWeightCount = (weight - remainWeight) / (initialWeight + freeWeight);
+                weightCount = weight - remainWeight - specialWeightCount;
+                return getItemTotalPrice(item, weightCount, specialWeightCount).add(remainPrice);
+            }
         }
     }
 

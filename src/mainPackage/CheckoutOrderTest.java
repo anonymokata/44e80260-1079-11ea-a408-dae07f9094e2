@@ -30,29 +30,16 @@ public class CheckoutOrderTest extends formatBigDecimal {
     }
 
     @Test
-    public void scanItemReturnsTheUpdatedTotalPrice() { // regular price(without any special offer)
+    public void scanItemReturnsTheCheckoutTotalPrice() { // regular price(without any special offer)
         checkout.scanItem("Bread", 3); //test result in quantity
         checkout.scanItem("Ground Beef", 2.00);
 
         BigDecimal actual1 = checkout.getTotalPrice();
         assertEquals(getFormat(8.97), getFormat(actual1));
-
-//        checkout.removeItem("Bread", 1);//remove 1 bag of bread
-//        BigDecimal actual3 = checkout.getTotalPrice();
-//        assertEquals(getFormat(6.98), getFormat(actual3));
-//
-//        checkout.removeItem("Ice Cream", false); //remove item that is not in the cart
-//        BigDecimal actual4 = checkout.getTotalPrice();
-//        assertEquals(getFormat(6.98, getFormat(actual4));
-
-//        checkout.removeItem("Bread", true); //remove all bread
-//        BigDecimal actual5 = checkout.getTotalPrice();
-//        assertEquals(getFormat(2.00), getFormat(actual5));
-
     }
 
     @Test
-    public void scanMarkdownItemReturnTheUpdatedTotalPrice() { // markdown price
+    public void scanMarkdownItemReturnTheCheckoutTotalPrice() { // markdown price
         inventory.setMarkdown("Ground Beef", getFormat(0.50), true); // markdown $0.50
 
         checkout.scanItem("Ground Beef", 2.50); //test single markdown price total
@@ -65,7 +52,7 @@ public class CheckoutOrderTest extends formatBigDecimal {
     }
 
     @Test
-    public void scanningAnPackageDealReturnTheItemTotalPrice() { // package deal -> N for $M
+    public void scanningAnPackageDealReturnTheCheckoutTotalPrice() { // package deal -> N for $M
         inventory.setNForXDollarSpecial("Avocado", 4, getFormat(3.00), true); // 4 for $3
         checkout.scanItem("Avocado", 5);    //test total price when scanning an quantity package deal item
         BigDecimal actual1 = checkout.getTotalPrice();
@@ -92,33 +79,67 @@ public class CheckoutOrderTest extends formatBigDecimal {
     }
 
     @Test
-    public void specialOfferReturnsTheItemTotalPrice() { // Buy N for M at X% off, with or without limitation
-        String name1 = "Avocado";
-        inventory.setBuyNGetMAtAPercentage(name1, 2, 1, true);//buy 2 get 1 for free
+    public void scanningByNForMAtXPercentageOffItemsReturnsTheCheckoutTotalPrice() { // Buy N for M at X% off, with or without limitation
+        inventory.setBuyNGetMAtAPercentage("Avocado", 2, 1, true);//buy 2 get 1 for free
 
-        checkout.scanItem(name1, 6);
+        checkout.scanItem("Avocado", 6);
         BigDecimal actual1 = checkout.getTotalPrice();
         assertEquals(getFormat(4), getFormat(actual1));
 
-        inventory.setBuyNGetMAtAPercentage(name1, 2, 1, 50.00, true);//buy 2 get 1 for 50% off
+        inventory.setBuyNGetMAtAPercentage("Avocado", 2, 1, 50.00, true);//buy 2 get 1 for 50% off
         BigDecimal actual2 = checkout.getTotalPrice();
         assertEquals(getFormat(5), getFormat(actual2));
 
-        inventory.setBuyNGetMAtAPercentage(name1, 1, 1, 50.00, 4, true); //buy 1 get 1 for 50% off with a limitation of 4
+        inventory.setBuyNGetMAtAPercentage("Avocado", 1, 1, 50.00, 4, true); //buy 1 get 1 for 50% off with a limitation of 4
         BigDecimal actual3 = checkout.getTotalPrice();
         assertEquals(getFormat(5), getFormat(actual3));
 
-        String name2 = "Ground Beef";
-        inventory.setBuyNGetMAtAPercentage(name2, 2.00, 1.00, 50.00, 6, true); //buy 2 pounds get 1 pound for half off with a limitation of 6
+        inventory.setBuyNGetMAtAPercentage("Ground Beef", 2.00, 1.00, 50.00, 6.00, true); //buy 2 pounds get 1 pound for half off with a limitation of 6
 
-        checkout.scanItem(name2, 7.00);
+        checkout.scanItem("Ground Beef", 7.00);
         BigDecimal actual4 = checkout.getTotalPrice();
         assertEquals(getFormat(14), getFormat(actual4));
 
-        String name3 = "Apple";
-        checkout.scanItem(name3, 5.00); // scan more item to test the updated total price
+        checkout.scanItem("Apple", 5.00); // scan more item to test the updated total price
         BigDecimal actual5 = checkout.getTotalPrice();
         assertEquals(getFormat(17.45), getFormat(actual5));
+    }
+
+    @Test
+    public void removingItemsFromCartReturnTheCheckoutTotalPrice(){
+        inventory.setBuyNGetMAtAPercentage("Ground Beef", 2.00, 1.00, 50.00, 6.00, true); //buy 2 pounds get 1 pound for half off with a limitation of 6
+        inventory.setNForXDollarSpecial("Broccoli", 3, getFormat(2.50), 6.00,  true);// buy 3 pounds for $2.5, limit 6 pounds
+        inventory.setMarkdown("Apple", getFormat(0.19), true); // markdown $0.19
+        inventory.setBuyNGetMAtAPercentage("Pasta", 3, 1, true);// buy 3 get 1 for free
+        inventory.setBuyNGetMAtAPercentage("Small Green Onion", 2, 1, 25.00, true); // buy 2 get 1 for 25% off
+
+
+        checkout.scanItem("Pasta", 5);
+        checkout.scanItem("Bread", 3);
+        checkout.scanItem("Avocado", 5);
+        checkout.scanItem("Ground Beef", 10.00);
+        checkout.scanItem("Apple", 3.00);
+        checkout.scanItem("Bacon", 1);
+        checkout.scanItem("Small Green Onion", 2);
+        checkout.scanItem("Organic Chicken", 5.15);
+        checkout.scanItem("Small Green Onion", 2);
+
+
+        BigDecimal actualCheckoutTotal = checkout.getTotalPrice();
+        checkout.testMethod();
+        assertEquals(getFormat(61.67), getFormat(actualCheckoutTotal));
+
+//        checkout.removeItem("Bread", 1);//remove 1 bag of bread
+//        BigDecimal actual3 = checkout.getTotalPrice();
+//        assertEquals(getFormat(6.98), getFormat(actual3));
+
+//        checkout.removeItem("Ice Cream", false); //remove item that is not in the cart
+//        BigDecimal actual4 = checkout.getTotalPrice();
+//        assertEquals(getFormat(6.98), getFormat(actual4));
+//
+//        checkout.removeItem("Bread", true); //remove all bread
+//        BigDecimal actual5 = checkout.getTotalPrice();
+//        assertEquals(getFormat(2.00), getFormat(actual5));
     }
 
 }
