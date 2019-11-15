@@ -1,7 +1,5 @@
 package mainPackage;
 
-import specialPricePacakage.Markdown;
-
 import java.math.BigDecimal;
 
 public class Item extends formatBigDecimal {
@@ -59,6 +57,6 @@ public class Item extends formatBigDecimal {
     //for debug
     @Override
     public String toString() {
-        return "   <Name:"+itemName + "              weighted:" + isWeight +"       $" + itemPrice +">";
+        return "   <Name:"+itemName + "     weighted:" + isWeight +"   $" + itemPrice + ">";
     }
 }

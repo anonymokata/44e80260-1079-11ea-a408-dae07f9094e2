@@ -15,7 +15,7 @@ public class NForXDollar extends formatBigDecimal implements SpecialPrice {
     private Integer limitQuantity;
     private Double limitWeight;
 
-    public NForXDollar(int initialPackageDeal, BigDecimal packagePrice, Integer Quantity) {
+    public NForXDollar(int initialPackageDeal, BigDecimal packagePrice, Integer limitQuantity) {
         this.packageQuantity = initialPackageDeal;
         this.packagePrice = packagePrice;
         this.limitQuantity = limitQuantity;

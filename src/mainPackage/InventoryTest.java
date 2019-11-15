@@ -1,10 +1,6 @@
 package mainPackage;
 
 import org.junit.Test;
-
-import java.math.BigDecimal;
-import java.math.RoundingMode;
-
 import static org.junit.Assert.*;
 
 public class InventoryTest extends formatBigDecimal{

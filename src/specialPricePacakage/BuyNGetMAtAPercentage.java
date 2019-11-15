@@ -77,10 +77,10 @@ public class BuyNGetMAtAPercentage extends formatBigDecimal implements SpecialPr
     private BigDecimal calculatePriceQuantifySpecialOffer(Item item, int specialCounter) {
         return getFormat(specialCounter).multiply(item.getItemPrice().multiply(BigDecimal.valueOf((100 - this.discountPercentage) / 100)));
     }
-    /*-------------------------------------------------------------------------------------------*/
 
 
-    /*---------------------calculate price in weight methods--------------------------*/
+
+    /*---------------------calculate price in weight methods------------------------------------*/
     @Override
     public BigDecimal calculatePrice(Item item, double weight){
         double weightCount = 0;
@@ -123,6 +123,5 @@ public class BuyNGetMAtAPercentage extends formatBigDecimal implements SpecialPr
     private BigDecimal getPriceForThoseItemsQualifySpecialOffer(Item item, double specialWeightCounter) {
         return item.getItemPrice().multiply(getFormat(getFormat(specialWeightCounter)).multiply(BigDecimal.valueOf((100 - this.discountPercentage) / 100)));
     }
-    /*---------------------------------------------------------------------------------*/
 
 }

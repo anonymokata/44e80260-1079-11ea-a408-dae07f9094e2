@@ -1,7 +1,5 @@
 package mainPackage;
 
-import jdk.swing.interop.SwingInterOpUtils;
-
 import java.math.BigDecimal;
 import java.util.*;
 
@@ -75,35 +73,32 @@ public class CheckoutOrder extends formatBigDecimal {
 
     /*---------------calculate total price methods------------------*/
     public BigDecimal getTotalPrice() {
-       return getItemTotalInQuantity().add(getItemTotalInWeight());
+        return getItemTotalInQuantity().add(getItemTotalInWeight());
     }
 
-    private BigDecimal getItemTotalInQuantity(){
+    private BigDecimal getItemTotalInQuantity() {
         BigDecimal sum = new BigDecimal(0);
         for (Map.Entry<Item, Integer> entry : scannedItemsInQuantity.entrySet()) {
-            if(entry.getKey().isSpecial()){
+            if (entry.getKey().isSpecial()) {
                 sum = sum.add(entry.getKey().getSpecialPrice().calculatePrice(entry.getKey(), entry.getValue()));
-            }else{
+            } else {
                 sum = sum.add(entry.getKey().calculatePrice(entry.getKey(), entry.getValue()));
             }
         }
         return sum;
     }
 
-    private BigDecimal getItemTotalInWeight(){
+    private BigDecimal getItemTotalInWeight() {
         BigDecimal sum = new BigDecimal(0);
         for (Map.Entry<Item, Double> entry : scannedItemsInWeight.entrySet()) {
-            if(entry.getKey().isSpecial()){
+            if (entry.getKey().isSpecial()) {
                 sum = sum.add(entry.getKey().getSpecialPrice().calculatePrice(entry.getKey(), entry.getValue()));
-            }else{
+            } else {
                 sum = sum.add(entry.getKey().calculatePrice(entry.getKey(), entry.getValue()));
             }
         }
         return sum;
     }
-
-
-
 
 
     /*-------------------------------Remove Methods-------------------------*/
@@ -124,9 +119,7 @@ public class CheckoutOrder extends formatBigDecimal {
         }
     }
 
-//    private void updateItemFromMapAfterRemoving(){
-//
-//    }
+
     private void removeItemAll(Item item) {
         if (scannedItemsInQuantity.containsKey(item)) {
             for (Map.Entry<Item, Integer> entry : scannedItemsInQuantity.entrySet()) {
@@ -156,18 +149,18 @@ public class CheckoutOrder extends formatBigDecimal {
     }
     /*----------------------------------------------------------------------------*/
 
-   public void testMethod() {
+    public void testMethod() {
         int count = 0;
-        for(Map.Entry<Item, Integer> testMap : scannedItemsInQuantity.entrySet()) {
+        for (Map.Entry<Item, Integer> testMap : scannedItemsInQuantity.entrySet()) {
             count++;
             System.out.print(count + ": " + testMap.getKey().toString());
-            System.out.println("         quantity: "+ testMap.getValue());
+            System.out.println("         quantity: " + testMap.getValue());
 
         }
-        for(Map.Entry<Item, Double> testMap : scannedItemsInWeight.entrySet()) {
+        for (Map.Entry<Item, Double> testMap : scannedItemsInWeight.entrySet()) {
             count++;
             System.out.print(count + ": " + testMap.getKey().toString());
-            System.out.println("           weight: "+ testMap.getValue());
+            System.out.println("           weight: " + testMap.getValue());
         }
     }
 }
