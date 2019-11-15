@@ -16,11 +16,11 @@ public class Markdown extends formatBigDecimal implements SpecialPrice {
     }
 
     public BigDecimal calculatePrice(Item item, int quantity){
-        return item.getItemPrice().subtract(this.markdownPrice).multiply(getFormat(quantity));
+        return (item.getItemPrice().subtract(this.markdownPrice)).multiply(getFormat(quantity));
     }
 
     public BigDecimal calculatePrice(Item item, double weight){
-        return item.getItemPrice().subtract(this.markdownPrice).multiply(getFormat(weight));
+        return (item.getItemPrice().subtract(this.markdownPrice)).multiply(getFormat(weight));
     }
 
 }
