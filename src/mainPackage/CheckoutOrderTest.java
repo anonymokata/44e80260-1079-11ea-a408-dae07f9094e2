@@ -67,14 +67,20 @@ public class CheckoutOrderTest extends formatBigDecimal {
     @Test
     public void scanningAnPackageDealReturnTheItemTotalPrice() { // package deal -> N for $M
         inventory.setNForXDollarSpecial("Avocado", 4, getFormat(3.00), true); // 4 for $3
-
-        checkout.scanItem("Avocado", 5);
+        checkout.scanItem("Avocado", 5);    //test total price when scanning an package deal item
         BigDecimal actual = checkout.getTotalPrice();
         assertEquals(getFormat(4), getFormat(actual));
 
-        checkout.scanItem("Bread", 1); //test total price of all scanned items with N for $N item in it
+        checkout.scanItem("Bread", 1); //test total price of all scanned items mixed with non special offer items
         BigDecimal actualX = checkout.getTotalPrice();
         assertEquals(getFormat(5.99), getFormat(actualX));
+
+        inventory.setNForXDollarSpecial("Ice Cream", 6, getFormat(10), 6, true);//test total price of all scanned item mixed with package deal with limitation
+        checkout.scanItem("Ice Cream", 7);
+        BigDecimal actualY = checkout.getTotalPrice();
+        assertEquals(getFormat(17.98), getFormat(actualY));
+
+
 
     }
 

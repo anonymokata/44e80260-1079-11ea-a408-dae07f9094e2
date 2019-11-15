@@ -37,16 +37,23 @@ public class Inventory {
 
     //NForXDollar: quantity params
     public void setNForXDollarSpecial(String name, int packageQuantity, BigDecimal packagePrice, boolean isSpecial){
+      setNForXDollarSpecial(name, packageQuantity, packagePrice, null, isSpecial);
+    }
+
+    public void setNForXDollarSpecial(String name, int packageQuantity, BigDecimal packagePrice, Integer limit, boolean isSpecial){
         Item item = findItem(name);
         item.setSpecial(isSpecial);
-        item.setSpecialPrice(new NForXDollar(packageQuantity, packagePrice));
+        item.setSpecialPrice(new NForXDollar(packageQuantity, packagePrice, limit));
     }
 
     //NForXDollar: weight params
     public void setNForXDollarSpecial(String name, double packageWeight, BigDecimal packagePrice, boolean isSpecial){
+        setNForXDollarSpecial(name, packageWeight, packagePrice, null, isSpecial);
+    }
+    public void setNForXDollarSpecial(String name, double packageWeight, BigDecimal packagePrice, Integer limit, boolean isSpecial){
         Item item = findItem(name);
         item.setSpecial(isSpecial);
-        item.setSpecialPrice(new NForXDollar(packageWeight, packagePrice));
+        item.setSpecialPrice(new NForXDollar(packageWeight, packagePrice, limit));
     }
 
 
