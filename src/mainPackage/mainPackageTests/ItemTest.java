@@ -1,6 +1,6 @@
 package mainPackage.mainPackageTests;
 
-import mainPackage.FormatBigDecimal;
+import mainPackage.FormattingBigDecimal;
 import mainPackage.Inventory;
 import mainPackage.Item;
 import org.junit.Before;
@@ -8,7 +8,7 @@ import org.junit.Test;
 
 import static junit.framework.TestCase.assertEquals;
 
-public class ItemTest extends FormatBigDecimal {
+public class ItemTest extends FormattingBigDecimal {
     private Inventory inventory;
     private Item i;
     private Item ii;
@@ -25,7 +25,7 @@ public class ItemTest extends FormatBigDecimal {
 
     @Test
     public void getItemsAndReturnItsTotalPrice() {
-        assertEquals(getFormat(19.9), getFormat(i.calculatePrice(inventory.getItemHashMap().get("Bread"), 10)));
-        assertEquals(getFormat(9.9), getFormat(i.calculatePrice(inventory.getItemHashMap().get("Grape"), 10)));
+        assertEquals(getFormat(19.9), getFormat(i.calculatePrice(inventory.getItemInventory().get("Bread"), 10)));
+        assertEquals(getFormat(9.9), getFormat(i.calculatePrice(inventory.getItemInventory().get("Grape"), 10)));
     }
 }

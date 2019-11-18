@@ -2,17 +2,15 @@ package specialPricePacakage;
 
 import mainPackage.Item;
 import mainPackage.SpecialPrice;
-import mainPackage.FormatBigDecimal;
+import mainPackage.FormattingBigDecimal;
 import java.math.BigDecimal;
 
 
-public class Markdown extends FormatBigDecimal implements SpecialPrice {
+public class Markdown extends FormattingBigDecimal implements SpecialPrice {
     private BigDecimal markdownPrice;
-
 
     public Markdown(BigDecimal markdownPrice) {
         this.markdownPrice = markdownPrice;
-
     }
 
     public BigDecimal calculatePrice(Item item, int quantity){

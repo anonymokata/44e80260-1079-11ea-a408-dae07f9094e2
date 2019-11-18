@@ -1,12 +1,11 @@
 package specialPricePacakage;
 
-import mainPackage.FormatBigDecimal;
+import mainPackage.FormattingBigDecimal;
 import mainPackage.Item;
 import mainPackage.SpecialPrice;
 import java.math.BigDecimal;
 
-public class NForXDollar extends FormatBigDecimal implements SpecialPrice {
-
+public class NForXDollar extends FormattingBigDecimal implements SpecialPrice {
     private int packageQuantity;
     private double packageWeight;
     private BigDecimal packagePrice;
@@ -27,26 +26,26 @@ public class NForXDollar extends FormatBigDecimal implements SpecialPrice {
 
     @Override
     public BigDecimal calculatePrice(Item item, int quantity) {
-        BigDecimal remainPrice;
+        BigDecimal remainingPrice;
         int count = 0;
         if (quantity >= packageQuantity) { // if qualify for special offers
             if (limitQuantity == null) {
                 int reminder = quantity % this.packageQuantity;
-                remainPrice = item.getItemPrice().multiply(getFormat(reminder));
-                count = getCountQuantity(quantity, count);
-                return getFormat(count).multiply(this.packagePrice).add(remainPrice);
+                remainingPrice = item.getItemPrice().multiply(getFormat(reminder));
+                count = getSpecialQuantityCount(quantity, count);
+                return getFormat(count).multiply(this.packagePrice).add(remainingPrice);
             } else {
-                int remainQuantity = quantity - limitQuantity;
-                remainPrice = item.getItemPrice().multiply(getFormat(remainQuantity));
-                count = getCountQuantity(limitQuantity, count);
-                return remainPrice.add(getFormat(count).multiply(packagePrice));
+                int remainingQuantity = quantity - limitQuantity;
+                remainingPrice = item.getItemPrice().multiply(getFormat(remainingQuantity));
+                count = getSpecialQuantityCount(limitQuantity, count);
+                return remainingPrice.add(getFormat(count).multiply(packagePrice));
             }
         } else { //if not qualify for special offers
             return getFormat(quantity).multiply(item.getItemPrice());
         }
     }
 
-    private int getCountQuantity(int quantity, int count) {
+    private int getSpecialQuantityCount(int quantity, int count) {
         for (int i = 1; i <= quantity; i++) {
             if (i % packageQuantity == 0) {
                 count++;
@@ -57,19 +56,20 @@ public class NForXDollar extends FormatBigDecimal implements SpecialPrice {
 
     @Override
     public BigDecimal calculatePrice(Item item, double weight) {
-        BigDecimal remainPrice;
+        BigDecimal remainingPrice;
         double count = 0;
+        double remainingWeight = 0;
         if (weight >= this.packageWeight) { // if qualify for special offers
             if (limitWeight == null) {
-                double remainWeight = weight % this.packageWeight;
-                remainPrice = item.getItemPrice().multiply(getFormat(remainWeight));
-                count = getCountWeight(weight, count);
-                return BigDecimal.valueOf(count).multiply(this.packagePrice).add(remainPrice);
+                remainingWeight = weight % this.packageWeight;
+                remainingPrice = item.getItemPrice().multiply(getFormat(remainingWeight));
+                count = getSpecialWeightCount(weight, count);
+                return BigDecimal.valueOf(count).multiply(this.packagePrice).add(remainingPrice);
             } else {
-                double remainWeight = weight - (double) limitWeight;
-                remainPrice = item.getItemPrice().multiply(getFormat(remainWeight));
-                count = (weight - remainWeight) / packageWeight;
-                return remainPrice.add(getFormat(count).multiply(packagePrice));
+                remainingWeight = weight - limitWeight;
+                remainingPrice = item.getItemPrice().multiply(getFormat(remainingWeight));
+                count = (weight - remainingWeight) / packageWeight;
+                return remainingPrice.add(getFormat(count).multiply(packagePrice));
             }
 
         } else { //if not qualify for special offers
@@ -77,13 +77,12 @@ public class NForXDollar extends FormatBigDecimal implements SpecialPrice {
         }
     }
 
-    private double getCountWeight(double weight, double count) {
+    private double getSpecialWeightCount(double weight, double count) {
         for (double i = 1; i <= weight; i++) {
             if (i % this.packageWeight == 0) {
                 count++;
             }
         }
         return count;
-
     }
 }

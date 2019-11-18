@@ -1,7 +1,7 @@
 package specialPricePacakage.specialPricePackageTests;
 
-import mainPackage.FormatBigDecimal;
+import mainPackage.FormattingBigDecimal;
 
-public class BuyNGetMAtAPercentageTest extends FormatBigDecimal {
+public class BuyNGetMAtAPercentageTest extends FormattingBigDecimal {
     // tested in checkoutOrderTest class
 }

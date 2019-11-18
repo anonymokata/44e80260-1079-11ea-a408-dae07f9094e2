@@ -1,23 +1,21 @@
 package mainPackage.mainPackageTests;
 
 import mainPackage.CheckoutOrder;
-import mainPackage.FormatBigDecimal;
+import mainPackage.FormattingBigDecimal;
 import mainPackage.Inventory;
 import mainPackage.Item;
 import org.junit.Before;
 import org.junit.Test;
-
-import java.math.BigDecimal;
-
 import static junit.framework.TestCase.assertEquals;
 
-public class CheckoutOrderTest extends FormatBigDecimal {
+public class CheckoutOrderTest extends FormattingBigDecimal {
     private Inventory inventory;
     private CheckoutOrder checkout;
 
     @Before
     public void setup() {
         inventory = new Inventory();
+        //constructor params: String itemName, boolean isWeight, BigDecimal itemPrice, Boolean isSpecial
         inventory.storeItems(new Item("Bread", false, getFormat(1.99), false));
         inventory.storeItems(new Item("Pasta", false, getFormat(3), false));
         inventory.storeItems(new Item("Bacon", false, getFormat(3), false));
@@ -29,6 +27,7 @@ public class CheckoutOrderTest extends FormatBigDecimal {
         inventory.storeItems(new Item("Apple", true, getFormat(0.69), false));
         inventory.storeItems(new Item("Ice Cream", false, getFormat(1.99), false));
         inventory.storeItems(new Item("Grape", true, getFormat(0.99), false));
+        inventory.storeItems(new Item("Pork Shoulder", true, getFormat(3.99), false));
 
         checkout = new CheckoutOrder(inventory);
     }
@@ -36,83 +35,75 @@ public class CheckoutOrderTest extends FormatBigDecimal {
     @Test
     public void scanItemReturnsTheCheckoutTotalPrice() { // regular price(without any special offer)
         checkout.scanItem("Bread", 3); //test result in quantity
-        checkout.scanItem("Ground Beef", 2.00);
+        checkout.scanItem("Ground Beef", 2.00); // test result in weight
 
-        BigDecimal actual1 = checkout.getTotalPrice();
-        assertEquals(getFormat(8.97), getFormat(actual1));
+        assertEquals(getFormat(8.97), getFormat(checkout.getTotalPrice()));
     }
 
-    @Test
-    public void scanMarkdownItemReturnTheCheckoutTotalPrice() { // markdown price
-        inventory.setMarkdown("Ground Beef", getFormat(0.50), true); // markdown $0.50
+    @Test     // markdown price
+    public void scanMarkdownItemReturnTheCheckoutTotalPrice() {
+        inventory.setMarkdown("Ground Beef", getFormat(0.50), true); //params: (name, markdownPrice, isSpecial)
 
         checkout.scanItem("Ground Beef", 2.50); //test single markdown price total
-        BigDecimal actual = checkout.getTotalPrice();
-        assertEquals(getFormat(2.50), getFormat(actual));
+        assertEquals(getFormat(2.50), getFormat(checkout.getTotalPrice()));
 
-        checkout.scanItem("Bread", 1); //test total price of all scanned items with markdown item in it
-        BigDecimal actualX = checkout.getTotalPrice();
-        assertEquals(getFormat(4.49), getFormat(actualX));
+        checkout.scanItem("Bread", 1); //test updated total price
+        assertEquals(getFormat(4.49), getFormat(checkout.getTotalPrice()));
     }
 
-    @Test
-    public void scanningAnPackageDealReturnTheCheckoutTotalPrice() { // package deal -> N for $M
-        inventory.setNForXDollarSpecial("Avocado", 4, getFormat(3.00), true); // 4 for $3
-        checkout.scanItem("Avocado", 5);    //test total price when scanning an quantity package deal item
-        BigDecimal actual1 = checkout.getTotalPrice();
-        assertEquals(getFormat(4), getFormat(actual1));
+    @Test   // package deal -> N for $M
+    public void scanningAnPackageDealReturnTheCheckoutTotalPrice() {
 
-        checkout.scanItem("Bread", 1); //test total price of all scanned items mixed with non special offer quantity items
-        BigDecimal actual2 = checkout.getTotalPrice();
-        assertEquals(getFormat(5.99), getFormat(actual2));
+        inventory.setNForXDollarSpecial("Avocado", 4, getFormat(3.00), true); // params: (name, initialQuantity, discountQuantity, isSpecial)
+        checkout.scanItem("Avocado", 5);
+        assertEquals(getFormat(4), getFormat(checkout.getTotalPrice()));
 
-        inventory.setNForXDollarSpecial("Ice Cream", 6, getFormat(10), 6, true);//test total price of all scanned item mixed with quantity package item with limitation
+        checkout.scanItem("Bread", 1);
+        assertEquals(getFormat(5.99), getFormat(checkout.getTotalPrice()));
+
+        inventory.setNForXDollarSpecial("Ice Cream", 6, getFormat(10), 6, true);// params: (name, packageQuantity, packagePrice, limitation, isSpecial)
         checkout.scanItem("Ice Cream", 7);
-        BigDecimal actual3 = checkout.getTotalPrice();
-        assertEquals(getFormat(17.98), getFormat(actual3));
+        assertEquals(getFormat(17.98), getFormat(checkout.getTotalPrice()));
 
-        inventory.setNForXDollarSpecial("Grape", 4.00, getFormat(3), true);// test total price of all scanned item mixed with weighted package deal items.
+        inventory.setNForXDollarSpecial("Grape", 4.00, getFormat(3), true); //params: (name, packageWeight, packagePrice, isSpecial)
         checkout.scanItem("Grape", 8.00);
-        BigDecimal actual4 = checkout.getTotalPrice();
-        assertEquals(getFormat(23.98), getFormat(actual4));
+        assertEquals(getFormat(23.98), getFormat(checkout.getTotalPrice()));
 
-        inventory.setNForXDollarSpecial("Broccoli", 3, getFormat(2.50), 6.00,  true);// test total price of all scanned item mixed with weighted package deal items with limitation.
+        inventory.setNForXDollarSpecial("Broccoli", 3.00, getFormat(2.50), 6.00, true); //params: (name, packageWeight, packagePrice, limitation, isSpecial)
         checkout.scanItem("Broccoli", 7.00);
-        BigDecimal actual5 = checkout.getTotalPrice();
-        assertEquals(getFormat(29.97), getFormat(actual5));
+        assertEquals(getFormat(29.97), getFormat( checkout.getTotalPrice()));
     }
 
     @Test
-    public void scanningByNForMAtXPercentageOffItemsReturnsTheCheckoutTotalPrice() { // Buy N for M at X% off, with or without limitation
+    public void scanningBuyNForMAtXPercentageOffItemsReturnsTheCheckoutTotalPrice() { // Buy N for M at X% off, with or without limitation
         inventory.setBuyNGetMAtAPercentage("Avocado", 2, 1, true);//buy 2 get 1 for free
 
         checkout.scanItem("Avocado", 6);
-        BigDecimal actual1 = checkout.getTotalPrice();
-        assertEquals(getFormat(4), getFormat(actual1));
+        assertEquals(getFormat(4), getFormat(checkout.getTotalPrice()));
 
         inventory.setBuyNGetMAtAPercentage("Avocado", 2, 1, 50.00, true);//buy 2 get 1 for 50% off
-        BigDecimal actual2 = checkout.getTotalPrice();
-        assertEquals(getFormat(5), getFormat(actual2));
+        assertEquals(getFormat(5), getFormat(checkout.getTotalPrice()));
 
         inventory.setBuyNGetMAtAPercentage("Avocado", 1, 1, 50.00, 4, true); //buy 1 get 1 for 50% off with a limitation of 4
-        BigDecimal actual3 = checkout.getTotalPrice();
-        assertEquals(getFormat(5), getFormat(actual3));
+        assertEquals(getFormat(5), getFormat(checkout.getTotalPrice()));
 
-        inventory.setBuyNGetMAtAPercentage("Ground Beef", 2.00, 1.00, 50.00, 6.00, true); //buy 2 pounds get 1 pound for half off with a limitation of 6
+        inventory.setBuyNGetMAtAPercentage("Ground Beef", 2.00, 1.00, 50.00, 6.00, true); //buy 2 pounds get 1 pound for half off with a limitation of 6 lbs
 
         checkout.scanItem("Ground Beef", 7.00);
-        BigDecimal actual4 = checkout.getTotalPrice();
-        assertEquals(getFormat(14), getFormat(actual4));
+        assertEquals(getFormat(14), getFormat(checkout.getTotalPrice()));
 
         checkout.scanItem("Apple", 5.00); // scan more item to test the updated total price
-        BigDecimal actual5 = checkout.getTotalPrice();
-        assertEquals(getFormat(17.45), getFormat(actual5));
+        assertEquals(getFormat(17.45), getFormat(checkout.getTotalPrice()));
+
+        inventory.setBuyNGetMAtAPercentage("Pork Shoulder", 4.00, 1.50, true); // buy 4 lbs get 1.5 lbs for free
+        checkout.scanItem("Pork Shoulder", 11.00);
+        assertEquals(getFormat(49.37), getFormat(checkout.getTotalPrice()));
     }
 
     @Test
-    public void removingItemsFromCartReturnTheCheckoutTotalPrice(){
+    public void removingItemsFromCartReturnTheCheckoutTotalPrice() {
         inventory.setBuyNGetMAtAPercentage("Ground Beef", 2.00, 1.00, 50.00, 6.00, true); //buy 2 pounds get 1 pound for half off with a limitation of 6
-        inventory.setNForXDollarSpecial("Broccoli", 3, getFormat(2.50), 6.00,  true);// buy 3 pounds for $2.5, limit 6 pounds
+        inventory.setNForXDollarSpecial("Broccoli", 3, getFormat(2.50), 6.00, true);// buy 3 pounds for $2.5, limit 6 pounds
         inventory.setMarkdown("Apple", getFormat(0.19), true); // markdown $0.19
         inventory.setBuyNGetMAtAPercentage("Pasta", 3, 1, true);// buy 3 get 1 for free
         inventory.setBuyNGetMAtAPercentage("Small Green Onion", 2, 1, 25.00, true); // buy 2 get 1 for 25% off
@@ -143,5 +134,4 @@ public class CheckoutOrderTest extends FormatBigDecimal {
         checkout.removeItem("Small Green Onion", 2); // remove 2, which results not qualify any special offer
         assertEquals(getFormat(54.67), getFormat(checkout.getTotalPrice()));
     }
-
 }

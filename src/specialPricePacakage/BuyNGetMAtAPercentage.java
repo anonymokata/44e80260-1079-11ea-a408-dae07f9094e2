@@ -2,59 +2,62 @@ package specialPricePacakage;
 
 import mainPackage.Item;
 import mainPackage.SpecialPrice;
-import mainPackage.FormatBigDecimal;
+import mainPackage.FormattingBigDecimal;
 
 import java.math.BigDecimal;
+import java.text.Bidi;
 
 
-public class BuyNGetMAtAPercentage extends FormatBigDecimal implements SpecialPrice {
+public class BuyNGetMAtAPercentage extends FormattingBigDecimal implements SpecialPrice {
     private int initialQuantity;
-    private int freeQuantity;
+    private int discountQuantity;
     private double initialWeight;
-    private double freeWeight;
+    private double discountWeight;
     private Double discountPercentage;
     private Integer limitByQuantity;
     private Double limitByWeight;
 
-    public BuyNGetMAtAPercentage(int initialQuantity, int freeQuantity, Double discountPercentage, Integer limitByQuantity) {
+    public BuyNGetMAtAPercentage(int initialQuantity, int discountQuantity, Double discountPercentage, Integer limitByQuantity) {
         this.initialQuantity = initialQuantity;
-        this.freeQuantity = freeQuantity;
+        this.discountQuantity = discountQuantity;
+        getNullDiscountPercentage(discountPercentage);
+        this.limitByQuantity = limitByQuantity;
+    }
+
+    public BuyNGetMAtAPercentage(double initialWeight, double discountWeight, Double discountPercentage, Double limitByWeight) {
+        this.initialWeight = initialWeight;
+        this.discountWeight = discountWeight;
+        getNullDiscountPercentage(discountPercentage);
+        this.limitByWeight = limitByWeight;
+    }
+
+
+    private void getNullDiscountPercentage(Double discountPercentage) {
         if (discountPercentage == null) {
             this.discountPercentage = 100.00; // the free item is 100% for free
         } else {
             this.discountPercentage = discountPercentage;
         }
-        this.limitByQuantity = limitByQuantity;
     }
 
-    public BuyNGetMAtAPercentage(double initialWeight, double freeWeight, Double discountPercentage, Double limitByWeight) {
-        this.initialWeight = initialWeight;
-        this.freeWeight = freeWeight;
-        this.discountPercentage = discountPercentage;
-        this.limitByWeight = limitByWeight;
-    }
 
     /*---------------------calculate price in quantity methods--------------------------*/
     @Override
     public BigDecimal calculatePrice(Item item, int quantity) {
-        int counter = 0;
-        int specialCounter = 0;
-        int tempQuantity = 0;
-        if (initialQuantity + freeQuantity > quantity) { //if not qualify for special offers
+        int remainingQuantity = 0;
+        int specialQuantityCounter = 0;
+        if (initialQuantity + discountQuantity > quantity) { //if not qualify for special offers
             return item.getItemPrice().multiply(getFormat(quantity));
 
         } else {    //if qualify for special offers
-            if (this.limitByQuantity == null) { //without special offer limitation
-                tempQuantity = quantity;
-                specialCounter = getSpecialCounter(tempQuantity, specialCounter);
-                counter = quantity - specialCounter;
-                return getItemTotalPrice(item, counter, specialCounter);
+            if (this.limitByQuantity == null) { //without limitation
+                specialQuantityCounter = getSpecialCounter(quantity, specialQuantityCounter);
+                remainingQuantity = quantity - (specialQuantityCounter * (this.initialQuantity + this.discountQuantity));
+                return getItemTotalPrice(item, remainingQuantity, specialQuantityCounter);
             } else {
-                tempQuantity = this.limitByQuantity; //with item limitation
-                specialCounter = getSpecialCounter(tempQuantity, specialCounter);
-                counter = quantity - specialCounter;
-
-                return getItemTotalPrice(item, counter, specialCounter);
+                specialQuantityCounter = limitByQuantity / (this.initialQuantity + this.discountQuantity);
+                remainingQuantity = quantity - limitByQuantity;
+                return getItemTotalPrice(item, remainingQuantity, specialQuantityCounter);
             }
 
         }
@@ -62,66 +65,63 @@ public class BuyNGetMAtAPercentage extends FormatBigDecimal implements SpecialPr
     }
     private int getSpecialCounter(int quantity, int specialCounter) {
         for (int i = 1; i <= quantity; i++) {
-            if (i % (this.initialQuantity + this.freeQuantity) == 0) {
-                specialCounter += this.freeQuantity;
+            if (i % (this.initialQuantity + this.discountQuantity) == 0) {
+                specialCounter += this.discountQuantity;
             }
         }
         return specialCounter;
     }
 
-    private BigDecimal getItemTotalPrice(Item item, int counter, int specialCounter) {
-        return item.getItemPrice().multiply(getFormat(counter)).add(calculatePriceQuantifySpecialOffer(item, specialCounter));
-
+    private BigDecimal getItemTotalPrice(Item item, int remainingQuantity, int specialQuantityCounter) {
+        BigDecimal discountedPrice = getPriceForDiscountItems(item, specialQuantityCounter);
+        BigDecimal priceWithoutDiscount = item.getItemPrice().multiply(getFormat(this.initialQuantity).multiply(getFormat(specialQuantityCounter)));
+        return priceWithoutDiscount.add(getFormat(remainingQuantity).multiply(item.getItemPrice())).add(discountedPrice);
     }
 
-    private BigDecimal calculatePriceQuantifySpecialOffer(Item item, int specialCounter) {
-        return getFormat(specialCounter).multiply(item.getItemPrice().multiply(BigDecimal.valueOf((100 - this.discountPercentage) / 100)));
+    private BigDecimal getPriceForDiscountItems(Item item, int specialQuantityCounter) {
+        return getFormat(specialQuantityCounter).multiply(getFormat(this.discountQuantity).multiply(item.getItemPrice().multiply(BigDecimal.valueOf((100 - this.discountPercentage) / 100))));
     }
-
 
 
     /*---------------------calculate price in weight methods------------------------------------*/
     @Override
-    public BigDecimal calculatePrice(Item item, double weight){
-        double weightCount = 0;
+    public BigDecimal calculatePrice(Item item, double weight) {
+        double remainingWeight = 0;
         double specialWeightCount = 0;
-        double remainWeight;
         BigDecimal remainPrice;
 
-        if ((this.initialWeight + this.freeWeight > weight)) { // if not qualify for free offers
+        if ((this.initialWeight + this.discountWeight > weight)) { // if not qualify for free offers
             return getFormat(weight).multiply(item.getItemPrice());
         } else {   // if qualify for free offers
-            if(limitByWeight == null) {
-                remainWeight = weight;
-                specialWeightCount = getSpecialCounter(remainWeight, specialWeightCount);
-                weightCount = weight - specialWeightCount;
-
-                return getItemTotalPrice(item, weightCount, specialWeightCount);
-            }else{
-                remainWeight = weight - limitByWeight;
-                remainPrice = item.getItemPrice().multiply(getFormat(remainWeight));
-                specialWeightCount = (weight - remainWeight) / (initialWeight + freeWeight);
-                weightCount = weight - remainWeight - specialWeightCount;
-                return getItemTotalPrice(item, weightCount, specialWeightCount).add(remainPrice);
+            if (limitByWeight == null) { // without limitation
+                specialWeightCount = getSpecialCounter(weight, specialWeightCount);
+                remainingWeight = weight - (specialWeightCount * (this.initialWeight + this.discountWeight));
+                return getItemTotalPrice(item, remainingWeight, specialWeightCount);
+            } else {
+                specialWeightCount = limitByWeight / (initialWeight + discountWeight);
+                remainingWeight = weight - limitByWeight;
+                return getItemTotalPrice(item, remainingWeight, specialWeightCount);
             }
         }
     }
 
-    private BigDecimal getItemTotalPrice(Item item, double counter, double specialWeightCounter) {
-        return item.getItemPrice().multiply(getFormat(counter)).add(getPriceForThoseItemsQualifySpecialOffer(item, specialWeightCounter));
+    private BigDecimal getItemTotalPrice(Item item, double remainingWeight, double specialWeightCounter) {
+        BigDecimal discountedPrice = getPriceForDiscountItems(item, specialWeightCounter);
+        BigDecimal priceWithoutDiscount = item.getItemPrice().multiply(getFormat(this.initialWeight)).multiply(getFormat(specialWeightCounter));
+        return priceWithoutDiscount.add(getFormat(remainingWeight).multiply(item.getItemPrice())).add(discountedPrice);
     }
 
     private double getSpecialCounter(double weight, double specialCount) {
-        for (double i = 1; i <= weight; i++) {
-            if (i % (this.initialWeight + this.freeWeight) == 0) {
-                specialCount += this.freeWeight;
+        for (double i = 1; i <= weight; i += 0.01) {
+            if (getFormat(i).doubleValue() % (this.initialWeight + this.discountWeight) == 0) {
+                specialCount++;
             }
         }
         return specialCount;
     }
 
-    private BigDecimal getPriceForThoseItemsQualifySpecialOffer(Item item, double specialWeightCounter) {
-        return item.getItemPrice().multiply(getFormat(getFormat(specialWeightCounter)).multiply(BigDecimal.valueOf((100 - this.discountPercentage) / 100)));
+    private BigDecimal getPriceForDiscountItems(Item item, double specialWeightCounter) {
+        return getFormat(specialWeightCounter).multiply(getFormat(this.discountWeight).multiply(item.getItemPrice().multiply(BigDecimal.valueOf((100 - this.discountPercentage) / 100))));
     }
 
 }

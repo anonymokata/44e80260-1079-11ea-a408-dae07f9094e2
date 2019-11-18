@@ -2,14 +2,14 @@ package specialPricePacakage.specialPricePackageTests;
 
 import mainPackage.Inventory;
 import mainPackage.Item;
-import mainPackage.FormatBigDecimal;
+import mainPackage.FormattingBigDecimal;
 import org.junit.Before;
 import org.junit.Test;
 import specialPricePacakage.Markdown;
 
 import static org.junit.Assert.*;
 
-public class MarkdownTest extends FormatBigDecimal {
+public class MarkdownTest extends FormattingBigDecimal {
     private Inventory inventory;
     private Markdown m;
 
@@ -24,8 +24,8 @@ public class MarkdownTest extends FormatBigDecimal {
     @Test
     public void markdownItemPriceReturnTheUpdatedPrice() {
          m = new Markdown(getFormat(0.49));
-        assertEquals(getFormat(4.5), getFormat(m.calculatePrice(inventory.getItemHashMap().get("Bread"), 3))); // test in quantity
-        assertEquals(getFormat(1.5), getFormat(m.calculatePrice(inventory.getItemHashMap().get("Grape"), 3))); //test in Weight
+        assertEquals(getFormat(4.5), getFormat(m.calculatePrice(inventory.getItemInventory().get("Bread"), 3))); // test in quantity
+        assertEquals(getFormat(1.5), getFormat(m.calculatePrice(inventory.getItemInventory().get("Grape"), 3))); //test in Weight
     }
 
 }

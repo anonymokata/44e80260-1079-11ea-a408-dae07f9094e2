@@ -2,14 +2,14 @@ package specialPricePacakage.specialPricePackageTests;
 
 import mainPackage.Inventory;
 import mainPackage.Item;
-import mainPackage.FormatBigDecimal;
+import mainPackage.FormattingBigDecimal;
 import org.junit.Before;
 import org.junit.Test;
 import specialPricePacakage.NForXDollar;
 
 import static org.junit.Assert.*;
 
-public class NForXDollarTest extends FormatBigDecimal {
+public class NForXDollarTest extends FormattingBigDecimal {
     private Inventory inventory;
     private NForXDollar NFXD;
 
@@ -24,10 +24,10 @@ public class NForXDollarTest extends FormatBigDecimal {
     @Test
     public void setItemSpecialOfferReturnsItemOrderTotalPrice(){
         NFXD = new NForXDollar(3, getFormat(5.00), (Integer) null); //test in quantity
-        assertEquals(getFormat(10.00), getFormat(NFXD.calculatePrice(inventory.getItemHashMap().get("Bread"), 6)));
+        assertEquals(getFormat(10.00), getFormat(NFXD.calculatePrice(inventory.getItemInventory().get("Bread"), 6)));
 
         NFXD = new NForXDollar(3.00, getFormat(2.00), null); //test in weight
-        assertEquals(getFormat(3.98), getFormat(NFXD.calculatePrice(inventory.getItemHashMap().get("Grape"), 5.00)));
+        assertEquals(getFormat(3.98), getFormat(NFXD.calculatePrice(inventory.getItemInventory().get("Grape"), 5.00)));
 
     }
 }
