@@ -24,13 +24,13 @@ Intellij
 
 Test Cases
 --
-1. Scan a single item, it returns the current checkout total price.
-2. Scan multiple items without any special, it returns the correct checkout total price.
-3. Scan items contain markdown items(in quantity and in weight), it returns the correct checkout total price.
-4. Scan items contain markdown items and package deal items(in quantity and in weight), it returns correct checkout total price.
-5. Scan items contain markdown items, package deal items, and buy N get M for free(in quantity and in weight), it returns correct checkout total price.
-6. Scan items contain markdown items, package deal items, and but N gets M for X% off with or without limitation(in quantity and in weight), it returns correct checkout total price.
-7. Scan all items and remove one or more items(including partial removal in quantity, not in weight), returns updated checkout total price
+1. Scan a single item, it returns the updated checkout total price.
+2. Scan multiple items without any special, it returns the updatedcorrect checkout total price.
+3. Scan items contain markdown items(in quantity and in weight), it returns the updated checkout total price.
+4. Scan items contain markdown items and package deal items(in quantity and in weight), it returns the updated checkout total price.
+5. Scan items contain markdown items, package deal items, and buy N get M for free(in quantity and in weight), it returns the updated checkout total price.
+6. Scan items contain markdown items, package deal items, and but N gets M for X% off with or without limitation(in quantity and in weight), it returns the updated checkout total price.
+7. Scan all items and remove one or more items(including partial removal in quantity, not in weight), returns the updated checkout total price
  
 Simple UML Class Diagram For This Project
 ---
