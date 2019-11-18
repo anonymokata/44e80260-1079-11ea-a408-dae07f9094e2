@@ -13,7 +13,7 @@ Scanning or entering an item with its quantity or weight, the program calculates
 3. Supports a special offer of a 'Buy N get M for free', such as "Buy 2 get 1 for free" or "Buy 2 pounds get 1 pound for free
 4. Supports a special offer of a 'Buy N get M for X% off', such as "Buy 1 get 1 half off" or "Buy 1 pound get 1 pound 25% off".
 5. Supports a special offer of a package deal, such as "Buy 3 for $5" or "Buy 3 pounds for $5".
-6. Supports a limitation when items have special offers, such as buy 2 get 2 for free, limit 8.
+6. Supports a limitation when items have special offers, such as buy 2 get 2 for free with limiting 8 item total, or buy 3 lbs get 1.5 lbs for 50% with limiting 9 item total.
 7. Supports remove items after scanned items. It supports to remove all or partial quantity remove for items that are not just single one.
 
 Technologies used
