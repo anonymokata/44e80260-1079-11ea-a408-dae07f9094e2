@@ -2,7 +2,7 @@ Checkout Order Total Kata
 ======
 Description 
 -------------------------------
-This project, a grocery point-of-sale system, was built with Java program language. It is a showcase that implements business logic to calculate grocery checkout pre-tax total price by scanning or entering items in terms of weight and quantity.
+This project, a grocery point-of-sale system, was built with Java program language. It is a showcase that implements business logic to calculate grocery checkout pre-tax total price by scanning or entering items and tested the outcome with Junit.
 
 Usage
 -------------
