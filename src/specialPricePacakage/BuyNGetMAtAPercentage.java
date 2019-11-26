@@ -5,8 +5,6 @@ import mainPackage.SpecialPrice;
 import mainPackage.FormattingBigDecimal;
 
 import java.math.BigDecimal;
-import java.text.Bidi;
-
 
 public class BuyNGetMAtAPercentage extends FormattingBigDecimal implements SpecialPrice {
     private int initialQuantity;

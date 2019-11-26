@@ -32,12 +32,12 @@ public class NForXDollar extends FormattingBigDecimal implements SpecialPrice {
             if (limitQuantity == null) {
                 int reminder = quantity % this.packageQuantity;
                 remainingPrice = item.getItemPrice().multiply(getFormat(reminder));
-                count = getSpecialQuantityCount(quantity, count);
+                count = getQuantityCount(quantity, count);
                 return getFormat(count).multiply(this.packagePrice).add(remainingPrice);
             } else {
                 int remainingQuantity = quantity - limitQuantity;
                 remainingPrice = item.getItemPrice().multiply(getFormat(remainingQuantity));
-                count = getSpecialQuantityCount(limitQuantity, count);
+                count = getQuantityCount(limitQuantity, count);
                 return remainingPrice.add(getFormat(count).multiply(packagePrice));
             }
         } else { //if not qualify for special offers
@@ -45,7 +45,7 @@ public class NForXDollar extends FormattingBigDecimal implements SpecialPrice {
         }
     }
 
-    private int getSpecialQuantityCount(int quantity, int count) {
+    private int getQuantityCount(int quantity, int count) {
         for (int i = 1; i <= quantity; i++) {
             if (i % packageQuantity == 0) {
                 count++;
@@ -63,7 +63,7 @@ public class NForXDollar extends FormattingBigDecimal implements SpecialPrice {
             if (limitWeight == null) {
                 remainingWeight = weight % this.packageWeight;
                 remainingPrice = item.getItemPrice().multiply(getFormat(remainingWeight));
-                count = getSpecialWeightCount(weight, count);
+                count = getWeightCount(weight, count);
                 return BigDecimal.valueOf(count).multiply(this.packagePrice).add(remainingPrice);
             } else {
                 remainingWeight = weight - limitWeight;
@@ -77,7 +77,7 @@ public class NForXDollar extends FormattingBigDecimal implements SpecialPrice {
         }
     }
 
-    private double getSpecialWeightCount(double weight, double count) {
+    private double getWeightCount(double weight, double count) {
         for (double i = 1; i <= weight; i++) {
             if (i % this.packageWeight == 0) {
                 count++;

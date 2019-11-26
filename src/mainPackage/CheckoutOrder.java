@@ -7,8 +7,8 @@ public class CheckoutOrder extends FormattingBigDecimal {
 
     private Inventory inventory;
 
-    Map<Item, Integer> scannedItemsInQuantity = new HashMap<>();
-    Map<Item, Double> scannedItemsInWeight = new HashMap<>();
+    private Map<Item, Integer> scannedItemsInQuantity = new HashMap<>();
+    private Map<Item, Double> scannedItemsInWeight = new HashMap<>();
 
     public CheckoutOrder(Inventory inventory) {
         this.inventory = inventory;
@@ -70,6 +70,7 @@ public class CheckoutOrder extends FormattingBigDecimal {
         }
         return false;
     }
+
     /*---------------calculate total price methods------------------*/
     public BigDecimal getTotalPrice() {
         return getItemTotalInQuantity().add(getItemTotalInWeight());
