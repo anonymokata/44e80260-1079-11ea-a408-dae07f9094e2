@@ -34,7 +34,7 @@ Test Cases
  
 Simple UML Class Diagram For This Project
 ---
-![UML Diagram - Checkout Order Total Kata](https://user-images.githubusercontent.com/43623996/68981671-37dd5480-07d2-11ea-9833-5aed8f8fb531.png)
+![A Simple UML Diagram](https://user-images.githubusercontent.com/43623996/69649079-77116e00-103a-11ea-95db-01d6a1c80a6c.png)
 Note
 ---
 1. An item that calculates by its weight has to be entered as a double type when scanning it.
